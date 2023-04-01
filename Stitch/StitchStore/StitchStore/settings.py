@@ -55,7 +55,9 @@ ROOT_URLCONF = 'StitchStore.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            'StitchStore\webserviceapp\templates'
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
