@@ -8,11 +8,13 @@
 </head>
 <body>
     <h1>asdasd</h1>
-    <form action="webserviceapp/views.py">
-        <label for="fname">First name:</label><br>
-        <input type="text" id="fname" name="fname" value="John"><br>
-        <label for="lname">Last name:</label><br>
-        <input type="text" id="lname" name="lname" value="Doe"><br><br>
+    <form action="/loginPOST/" method = "POST">
+        {% csrf_token %}
+        <!-- añadir seguridad de password con javascript-->
+        <label for="nickname">Email o Nombre de Usuario</label><br>
+        <input type="text" id="nickname" name="nickname" placeholder="ej: ricardo@gmail.com"><br>
+        <label for="password">Last name:</label><br>
+        <input type="password" id="password" name="password" placeholder="************"><br><br>
         <input type="submit" value="Submit">
       </form> 
 </body>
