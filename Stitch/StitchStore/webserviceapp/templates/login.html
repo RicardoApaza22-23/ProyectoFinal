@@ -1,21 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+    {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Stitch</title>
+    <link rel="stylesheet" href="{% static 'css/login_style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 <body>
-    <h1>asdasd</h1>
-    <form action="/loginPOST/" method = "POST">
+    <div class = "formLogin">
+
+    <h1>Bienvenido</h1><br>
+    <fieldset> 
+    <legend>Inicia Sesión</legend>
+    <form action="/loginPOST/" method = "POST" >
+        
         {% csrf_token %}
+        
         <!-- añadir seguridad de password con javascript-->
         <label for="nickname">Email o Nombre de Usuario</label><br>
+        <i class="fa-solid fa-user"></i>
         <input type="text" id="nickname" name="nickname" placeholder="ej: ricardo@gmail.com"><br>
-        <label for="password">Last name:</label><br>
+        <label for="password">Contraseña:</label><br>
+        <i class="fa-solid fa-lock"></i>
         <input type="password" id="password" name="password" placeholder="************"><br><br>
-        <input type="submit" value="Submit">
+        <a href="#" class="link"> ¿Olvidaste tu contraseña?</a><br><br>
+        <input type="submit" value="login">
       </form> 
+       
+    </fieldset>
+    </div>
+    
 </body>
 </html>
