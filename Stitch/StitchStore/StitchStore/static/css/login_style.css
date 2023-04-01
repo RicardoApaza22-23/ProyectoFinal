@@ -12,3 +12,26 @@ body{
     min-height: 100vh;
     background: linear-gradient(to left, #347056 ,#082016);
 }
+
+.formLogin{
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    text-align: center;
+    padding: 30px 45px;
+    padding-top:10px;
+    box-shadow: 0 5px 10px rgb(71, 3, 6, 0, 7);
+    
+    
+}
+.fieldsetLogin{
+    border : 0;
+}
+.titulo{
+    color: #252525;
+    font-size: 35px;
+    font-weight: 800;
+    margin-top: 10px;
+    
+}
+
