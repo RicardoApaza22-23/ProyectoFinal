@@ -12,10 +12,10 @@
 </head>
 <body>
     <div class = "formLogin">
-
-    <h1>Bienvenido</h1><br>
-    <fieldset> 
-    <legend>Inicia Sesión</legend>
+    <fieldset class="fieldsetLogin"> 
+    <div class = "titulo">
+    <legend >Iniciar Sesión</legend>
+</div>
     <form action="/loginPOST/" method = "POST" >
         
         {% csrf_token %}
