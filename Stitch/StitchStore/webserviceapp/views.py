@@ -37,7 +37,10 @@ def loginPOST(request):
         password = requestForm.get('password')
         #if check_password(password,usuario.password):
         if password == usuario.password:
-             return JsonResponse({"status" : "login correcto"})
+            
+            
+            return JsonResponse({"status" : "login correcto" })
+            
         else:
             return JsonResponse({"status" : "contraseña incorrecta"})
     else:
