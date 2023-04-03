@@ -20,7 +20,7 @@ def nickname_existe_en_bd(request,nickname):
     else:
         return False
 
-
+#metodo para iniciar sesion
 def loginPOST(request):
     #validamos el método del formulario
     if(request.method!='POST'):
@@ -46,8 +46,11 @@ def loginPOST(request):
     else:
         return JsonResponse({"status" : "nombre de usuario no coincide en la BD"})
     
-    
-    
+#visualizar la pantalla de registro
+def register(request):
+    return render(request,"register.html")
+#metodo para registrar un usuario
+
     
    
     
