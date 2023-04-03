@@ -1,1 +1,54 @@
-@{% include "login.html" %}
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="{% static 'css/register_style.css' %}" />
+</head>
+
+<body>
+  {% include "header.html" %}
+
+  <div class="formLogin">
+    <div class="titulo">
+      <legend>Registrarse</legend>
+    </div>
+    <form action="/loginPOST/" method="POST">
+      {% csrf_token %}
+
+      <!-- añadir seguridad de password con javascript-->
+      
+      <div class="input-register">
+        <label for="nickname">Nombre de Usuario</label><br />
+        <i class="fa-solid fa-user"></i>
+        <input type="text" id="nickname" name="nickname" placeholder="ej: ricardo@gmail.com" /><br />
+      </div>
+      <div class="input-register">
+        <label for="email">Email:</label><br />
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="password" name="password" placeholder="************" />
+      </div>
+
+      <div class="input-register">
+        <label for="password">Contraseña:</label><br />
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="password" name="password" placeholder="************" />
+      </div>
+
+      <div class="input-register">
+        <label for="password">Vuelve a Escribir la Contraseña:</label><br />
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="password" name="password" placeholder="************" />
+      </div>
+      <br /><br />
+      <a href="#" class="link"> ¿Olvidaste tu contraseña?</a><br /><br />
+      <a href="#" class="link">Regístrate</a><br /><br />
+      <input type="submit" class="btn-enviar" value="login" />
+
+    </form>
+</body>
+
+</html>
