@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,200;1,600&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins',sans-serif;
+}
+
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 100px;
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+}
+
+.logo{
+    font-size: 2em;
+    color: #fff;
+    user-select: none;
+}
+.navegacion a{
+    position: relative;
+    font-size: 1.1em;
+    font-size: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+    color: black
+
+}
+.navegacion a:hover{
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.navegacion a::after{
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2.5px;
+    bottom: -6px;
+    background: #fff;
+    border-radius: 4px;
+    transform-origin: top;
+    transform: scaleX(0);
+    transition: transform .5s;
+    
+}
+
+.navegacion a:hover::after{
+    transform: scaleX(1);
+    
+}
+
+.navegacion .btnpopup{
+    width: 130px;
+    height: 50px;
+    position: relative;
+    background: transparent;
+    border: 2px solid;
+    border-radius: 5px;
+    border-width: 10px;
+    border-color: transparent;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #fff;
+    
+}
+
+.navegacion .btnpopup:hover{
+    background: #fff;
+    color: #000;
+}
+
+
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(to left, #347056 ,#082016);
+}
+
+.formLogin{
+    position: relative;
+    width: 400px;
+    height: 750px;
+    background-color: rgb(170, 187, 186);
+    text-align: center;   
+    padding-top:5px;
+    border-radius: 7px;
+   
+    
+}
+
+.formLogin a{
+    color: #000;
+    text-decoration: none;
+}
+
+.formLogin a:hover{
+    color:inherit;
+    text-decoration: underline;
+    
+}
+
+.titulo{
+    color: #252525;
+    font-size: 35px;
+    font-weight: 800;
+    margin-top: 10px; 
+}
+
+
+
+.input-register{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    border-bottom: 2px solid #000;
+    margin: 70px 0;
+}
+
+.input-register label{
+    position: center;
+    transform: translateY(-50%);
+    font-size: 1em;
+    font-weight: 500;
+    pointer-events: none;
+}
+
+.input-register input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+
+
+.btn-enviar{
+    width: 79%;
+    height: 30px;
+    background: #232e21;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+    
