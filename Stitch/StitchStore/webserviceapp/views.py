@@ -2,55 +2,158 @@ from django.shortcuts import render
 import json
 from django.http import JsonResponse
 from .models import Usuarios
-from django.contrib.auth.hashers import make_password,check_password
+from django.contrib.auth.hashers import make_password, check_password
+import re
+import jwt
 
 # Create your views here.
 def login(request):
-    return render(request,"login.html")
+    return render(request, "login.html")
 
 
-#método para verificar si el usuario  existe en la base de datos
-def nickname_existe_en_bd(request,nickname):
-    #comprobamos si el nickname existe en la base de datos
-    nick_exist = Usuarios.objects.filter(nombre = nickname).exists() 
-    
-    #devolverá true si existe y false en caso contrario
+# método para verificar si el usuario  existe en la base de datos
+def nickname_existe_en_bd(request, nickname):
+    # comprobamos si el nickname existe en la base de datos
+    nick_exist = Usuarios.objects.filter(nombre=nickname).exists()
+
+    # devolverá true si existe y false en caso contrario
     if nick_exist:
         return True
     else:
         return False
 
-#metodo para iniciar sesion
-def loginPOST(request):
-    #validamos el método del formulario
-    if(request.method!='POST'):
-        return None
-    #guardamos los datos del formulario 
-    requestForm = request.POST.dict()
-    
-    #le asignamos un valor del form para cada variable
-    nickname = requestForm.get('nickname')
-    if ((nickname_existe_en_bd(request,nickname) == True)):
-        
-        usuario = Usuarios.objects.get(nombre = nickname)
-         
-        password = requestForm.get('password')
-        #if check_password(password,usuario.password):
-        if password == usuario.password:
-            
-            
-            return JsonResponse({"status" : "login correcto" })
-            
-        else:
-            return JsonResponse({"status" : "contraseña incorrecta"})
-    else:
-        return JsonResponse({"status" : "nombre de usuario no coincide en la BD"})
-    
-#visualizar la pantalla de registro
-def register(request):
-    return render(request,"register.html")
-#metodo para registrar un usuario
+# metodo para iniciar sesion
 
+
+def loginPOST(request):
+    # validamos el método del formulario
+    if (request.method != 'POST'):
+        return None
+    # guardamos los datos del formulario
+    requestForm = request.POST.dict()
+
+    # le asignamos un valor del form para cada variable
+    nickname = requestForm.get('nickname')
+    if ((nickname_existe_en_bd(request, nickname) == True)):
+
+        usuario = Usuarios.objects.get(nombre=nickname)
+
+        password = requestForm.get('password')
+        # falta: hashear la contraseña
+        # if check_password(password,usuario.password):
+        if password == usuario.password:
+
+            return JsonResponse({"status": "login correcto"})
+
+        else:
+            # falta: reenviar a un html de error
+            return JsonResponse({"status": "contraseña incorrecta"})
+    else:
+        # falta: reenviar a un html de error
+        return JsonResponse({"status": "nombre de usuario no coincide en la BD"})
+
+# visualizar la pantalla de registro
+
+
+def register(request):
+    return render(request, "register.html")
+# metodo para comparar dos contraseñas(o cualquier variable)
+
+
+def compara_datos(dato1, dato2):
+    if dato1 == dato2:
+        return True
+    else:
+        return False
+
+# metodo para validar email
+
+
+def email_check(email):
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+    if (re.fullmatch(regex, email)):
+        return True
+    else:
+        return False
+
+# método para validar un email existente
+
+
+def email_existe_en_bd(request, email_form):
+    email_exist = Usuarios.objects.filter(email=email_form).exists()
+    if email_exist:
+        return True
+    else:
+        return False
+
+# metodo para registrar un usuario
+
+
+def registerPOST(request):
+    #solo aceptamos POST
+    if (request.method != 'POST'):
+        return None
+    # guardamos los request
+    form_register = request.POST.dict()
+    # y asignamos valores para mayor seguridad
+    nickname = form_register.get('nickname')
+    # si el nombre no existe en la bd se sigue con el proceso
+    if nickname_existe_en_bd(request, nickname) == False:
+        # se guardamos los valores de las contrasñas después de comprobar que el nickname no existe
+        # de esta manera, no se guardan estas variables si el nickname ya existe(ahorro de memoria)
+        email = form_register.get('email')
+        password = form_register.get('password')
+        password_repeat = form_register.get('password_repeat')
+        rol = form_register.get('rol')
+        pass
+        # si el email es valido, seguimos adelante con el registro
+        if email_check(email) == True:
+            pass
+            # si el email no está en la bd, seguimos
+            if email_existe_en_bd(request, email) == False:
+                pass
+                # si las contraseñas coinciden, finalmente procedemos a crear el usuario
+                if compara_datos(password, password_repeat) == True:
+                    newUser = Usuarios()
+                    newUser.nombre = nickname
+                    newUser.email = email
+                    #hasheamos la password
+                    pass_hash = make_password(password)
+                    newUser.password = pass_hash
+                    newUser.rol = rol
+                    #generamos un token
+                    secret = 'secreto_word'
+                    payload = {
+                    'user_id': newUser.id,
+                    'username': newUser.nombre
+                    }
+                    token = jwt.encode(payload,secret,algorithm='HS256')
+                    newUser.token = token
+                    datosUser = {
+                        'nombre' : newUser.nombre
+                    }
+                    #newUser.save()
+                    #falta: guardar los datos en la sesion
+                    #return JsonResponse({"status":"usuario registrad"})
+                    return render(request,"succesfully/registerDone.html",datosUser)
+                else:
+                    #return JsonResponse({"erorr": "contraseña no coincide"})
+                    return render(request,"errors/errorPass.html")
+            else:
+                #return JsonResponse({"erorr": "email ya existe"})
+                return render(request,"errors/errorEmail.html")
+        else:
+            #return JsonResponse({"erorr": "email invalido"})
+            return render(request,"errors/errorEmail.html")
+    else:
+        #return JsonResponse({"erorr": "usuario ya existe"})               
+        return render(request,"errors/errorNickname.html")
+    
+#--------------------errors--------------------------
+
+#----------------------------------------------------
+    
+    
     
    
     
