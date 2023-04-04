@@ -16,11 +16,11 @@
     <div class="titulo">
       <legend>Registrarse</legend>
     </div>
-    <form action="/loginPOST/" method="POST">
+    <form action="/registerPOST/" method="POST">
       {% csrf_token %}
 
       <!-- añadir seguridad de password con javascript-->
-      
+        <input type="hidden" id="rol" name="rol" value="0"/>
       <div class="input-register">
         <label for="nickname">Nombre de Usuario</label><br />
         <i class="fa-solid fa-user"></i>
@@ -28,8 +28,8 @@
       </div>
       <div class="input-register">
         <label for="email">Email:</label><br />
-        <i class="fa-solid fa-lock"></i>
-        <input type="password" id="password" name="password" placeholder="************" />
+        <i class="fa-solid fa-envelope"></i>
+        <input type="email" id="email" name="email" placeholder="ej: ricardo@gmail.com" />
       </div>
 
       <div class="input-register">
@@ -39,14 +39,16 @@
       </div>
 
       <div class="input-register">
-        <label for="password">Vuelve a Escribir la Contraseña:</label><br />
+        <label for="password_repeat">Vuelve a Escribir la Contraseña:</label><br />
         <i class="fa-solid fa-lock"></i>
-        <input type="password" id="password" name="password" placeholder="************" />
+        <input type="password" id="password_repeat" name="password_repeat" placeholder="************" />
       </div>
       <br /><br />
-      <a href="#" class="link"> ¿Olvidaste tu contraseña?</a><br /><br />
-      <a href="#" class="link">Regístrate</a><br /><br />
-      <input type="submit" class="btn-enviar" value="login" />
+      
+      <input type="submit" class="btn-enviar" value="registrar" /><br/>
+      <br/>
+     
+      <a href="/login/"class="link">Ya tienes una cuenta? Inicia sesión<</a>
 
     </form>
 </body>
