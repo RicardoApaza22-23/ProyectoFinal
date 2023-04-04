@@ -13,6 +13,7 @@ class Usuarios(models.Model):
     password = models.CharField(max_length=250)
     rol = models.IntegerField()
     email = models.CharField(max_length=250)
+    token = models.CharField(max_length=250)
 
     class Meta:
         managed = False
