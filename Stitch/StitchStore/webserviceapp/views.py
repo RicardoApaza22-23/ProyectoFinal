@@ -6,6 +6,8 @@ from django.contrib.auth.hashers import make_password, check_password
 import re
 import jwt
 
+#---------------------usuarios--------------------#
+
 # Create your views here.
 def login(request):
     return render(request, "login.html")
@@ -86,74 +88,99 @@ def email_existe_en_bd(request, email_form):
     else:
         return False
 
+# metodo para validar el nickname
+
+
+def nickname_validate(nickname):
+    # será un nickname formado de 6 a 14 letras
+    regex = r'\b[A-Za-z]{3,14}\b'
+    if re.fullmatch(regex, nickname):
+        return True
+    else:
+        return False
+# validamos el password
+
+
+def password_validate(password):
+    # será un password formado de 6 a 14 caracteres
+    regex = r'\b[A-Za-z0-9!?¿¡]{6,14}\b'
+    if re.fullmatch(regex, password):
+        return True
+    else:
+        return False
+
 # metodo para registrar un usuario
 
 
 def registerPOST(request):
-    #solo aceptamos POST
+    # solo aceptamos POST
     if (request.method != 'POST'):
         return None
     # guardamos los request
     form_register = request.POST.dict()
     # y asignamos valores para mayor seguridad
     nickname = form_register.get('nickname')
-    # si el nombre no existe en la bd se sigue con el proceso
-    if nickname_existe_en_bd(request, nickname) == False:
-        # se guardamos los valores de las contrasñas después de comprobar que el nickname no existe
-        # de esta manera, no se guardan estas variables si el nickname ya existe(ahorro de memoria)
-        email = form_register.get('email')
-        password = form_register.get('password')
-        password_repeat = form_register.get('password_repeat')
-        rol = form_register.get('rol')
-        pass
-        # si el email es valido, seguimos adelante con el registro
-        if email_check(email) == True:
+    # validamos el campo nickname
+    if nickname_validate(nickname) == True:
+            # si el nombre no existe en la bd se sigue con el proceso
+        if nickname_existe_en_bd(request, nickname) == False:
+            # se guardamos los valores de las contrasñas después de comprobar que el nickname no existe
+            # de esta manera, no se guardan estas variables si el nickname ya existe(ahorro de memoria)
+            email = form_register.get('email')
+
             pass
-            # si el email no está en la bd, seguimos
-            if email_existe_en_bd(request, email) == False:
+            # si el email es valido, seguimos adelante con el registro
+            if email_check(email) == True:
                 pass
-                # si las contraseñas coinciden, finalmente procedemos a crear el usuario
-                if compara_datos(password, password_repeat) == True:
-                    newUser = Usuarios()
-                    newUser.nombre = nickname
-                    newUser.email = email
-                    #hasheamos la password
-                    pass_hash = make_password(password)
-                    newUser.password = pass_hash
-                    newUser.rol = rol
-                    #generamos un token
-                    secret = 'secreto_word'
-                    payload = {
-                    'user_id': newUser.id,
-                    'username': newUser.nombre
-                    }
-                    token = jwt.encode(payload,secret,algorithm='HS256')
-                    newUser.token = token
-                    datosUser = {
-                        'nombre' : newUser.nombre
-                    }
-                    #newUser.save()
-                    #falta: guardar los datos en la sesion
-                    #return JsonResponse({"status":"usuario registrad"})
-                    return render(request,"succesfully/registerDone.html",datosUser)
+                # si el email no está en la bd, seguimos
+                if email_existe_en_bd(request, email) == False:
+                    password = form_register.get('password')
+                    password_repeat = form_register.get('password_repeat')
+                    rol = form_register.get('rol')
+                    pass
+                    #validamos la contraseña
+                    if password_validate(password) == True:
+                        # si las contraseñas coinciden, finalmente procedemos a crear el usuario
+                        if compara_datos(password, password_repeat) == True:
+                            newUser = Usuarios()
+                            newUser.nombre = nickname
+                            newUser.email = email
+                            # hasheamos la password
+                            pass_hash = make_password(password)
+                            newUser.password = pass_hash
+                            newUser.rol = rol
+                            # generamos un token
+                            secret = 'secreto_word'
+                            payload = {
+                            'user_id': newUser.id,
+                            'username': newUser.nombre
+                            }
+                            token = jwt.encode(payload, secret, algorithm='HS256')
+                            newUser.token = token
+                            datosUser = {
+                                'nombre': newUser.nombre.upper()
+                            }
+                            # newUser.save()
+                            # falta: guardar los datos en la sesion
+                            # return JsonResponse({"status":"usuario registrad"})
+                            return render(request, "succesfully/registerDone.html", datosUser)
+                        else:
+                            # return JsonResponse({"erorr": "contraseña no coincide"})
+                            return render(request, "errors/errorPass.html")
+                    return render(request, "errors/errorPass.html")
                 else:
-                    #return JsonResponse({"erorr": "contraseña no coincide"})
-                    return render(request,"errors/errorPass.html")
+                    #return JsonResponse({"erorr": "email ya existe"})
+                    return render(request,"errors/errorEmail.html")
             else:
-                #return JsonResponse({"erorr": "email ya existe"})
+                #return JsonResponse({"erorr": "email invalido"})
                 return render(request,"errors/errorEmail.html")
         else:
-            #return JsonResponse({"erorr": "email invalido"})
-            return render(request,"errors/errorEmail.html")
-    else:
-        #return JsonResponse({"erorr": "usuario ya existe"})               
-        return render(request,"errors/errorNickname.html")
+            #return JsonResponse({"erorr": "usuario ya existe"})               
+            return render(request,"errors/errorNickname.html")
     
-#--------------------errors--------------------------
 
-#----------------------------------------------------
     
     
     
-   
+#---------------------------------------------------#
     
