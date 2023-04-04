@@ -201,4 +201,29 @@ body{
     cursor: pointer;
 }
 
-    
+strong{
+    color: rgb(173, 32, 32);
+}
+.success{
+    color: rgb(66, 228, 66);
+}
+
+.error{
+    position: relative;
+    width: 400px;
+    height: 390px;
+    background-color: rgb(170, 187, 186);
+    text-align: center;   
+    padding-top:20px;
+    border-radius: 7px;
+}
+
+.btn-goback{
+    width: 29%;
+    height: 30px;
+    background: #232e21;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
