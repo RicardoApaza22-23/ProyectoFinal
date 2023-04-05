@@ -4,20 +4,24 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins',sans-serif;
+    
 }
 
 header{
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    padding: 20px 100px;
+    width: 102%;
+    padding: 4px 80px;
     background-color: transparent;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 99;
 }
+
+
+
 
 .logo{
     font-size: 2em;
@@ -83,11 +87,19 @@ header{
 
 
 body{
+    background: linear-gradient(to left, #347056 ,#082016);
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: red ;
     min-height: 100vh;
-    background: linear-gradient(to left, #347056 ,#082016);
+    background: linear-gradient(to left, #347056 ,#082016); 
+    
+    /* background: url("/static/img/sneakerswp.jpg") no-repeat  transparent;  */
+
+    
+    background-position: 50%;
+    
 }
 
 .formLogin{

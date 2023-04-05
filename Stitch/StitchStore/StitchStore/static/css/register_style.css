@@ -10,19 +10,22 @@ header{
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    padding: 20px 100px;
+    width: 102%;
+    padding: 4px 80px;
     background-color: transparent;
+    
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 99;
 }
 
+
 .logo{
     font-size: 2em;
     color: #fff;
     user-select: none;
+   
 }
 .navegacion a{
     position: relative;
@@ -167,4 +170,12 @@ body{
     border: none;
     border-radius: 6px;
     cursor: pointer;
+}
+
+.input-register .mostrar-ocultar{
+    position: absolute;
+    right: 13px;
+    bottom: -74%;
+    cursor: pointer;
+    font-size: 23px;
 }
