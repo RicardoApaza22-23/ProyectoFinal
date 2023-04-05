@@ -5,7 +5,7 @@ from .models import Usuarios
 from django.contrib.auth.hashers import make_password, check_password
 import re
 import jwt
-
+from django.shortcuts import redirect
 # ---------------------usuarios--------------------#
 
 # Create your views here.
@@ -56,8 +56,11 @@ def loginPOST(request):
         # falta: hashear la contraseña
         # if check_password(password,usuario.password):
         if password == usuario.password:
-
-            return JsonResponse({"status": "login correcto"})
+            #si el usuario esta registrado, se redirige a la homepage
+            #falta: redirigir bien la url
+            #return JsonResponse({"status": "login correcto"})
+            return redirect("/home/")
+        
 
         else:
             # falta: reenviar a un html de error
@@ -199,3 +202,5 @@ def registerPOST(request):
 
 #---------------------------------------------------#
     
+def home_page(request):
+    return render(request,"home.html")
