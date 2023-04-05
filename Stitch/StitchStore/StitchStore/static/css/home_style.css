@@ -1,0 +1,186 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins',sans-serif;
+    
+} 
+/* ---------------------------navegacion------------------------ */
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 102%;
+    padding: 4px 90px;
+    background-color: transparent;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    z-index: 99;
+  
+
+}
+
+body{  
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #c1ddd1 ,#8a9b94); 
+    
+}
+.navegacion a{
+    position: relative;
+    font-size: 1.1em;
+    font-size: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+    color: black
+
+}
+
+.navegacionHome {
+    position:absolute;
+    padding: 100px;
+    font-size: 1.1em 2px; 
+    text-decoration: none;
+    /* display: flex; */
+    text-align: center;
+    font-weight: 600;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 20px; 
+    justify-content: space-between ;
+    color: black;
+    
+}
+
+.menu{
+    position: absolute;
+    margin-left: 70%;
+    margin-top: -33px;
+}
+
+
+ .encabezado a{
+    position: relative;
+    font-size: 1.1em;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 40px;
+    color: black;
+    padding-left: 1%;
+   
+
+} 
+.formBuscar{
+    position: relative;
+    margin-left: 59.795rem;
+    margin-top: 14px;
+
+    
+}
+
+.buscar{
+    border: 2px solid #eee; 
+    border-radius:7px;
+    height: 37px;
+}
+.fa-magnifying-glass{
+    margin-bottom: 0.5px;
+}
+
+.nav-prendas{
+    display: flex;
+    position: absolute;
+
+}
+
+.nav-prendas .prendas{
+    position: relative;
+    width: 200px;
+    height: 100px;
+    padding: 400px 88px;
+
+    margin-top: 250px;
+    margin-left: 90px;
+    padding-top: 20px;
+    padding-left: 5px;
+    
+
+}
+.nav-prendas .prendas h2{
+    color:#fff;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 30px;
+    
+}
+.nav-prendas .prendas ul li{
+    list-style: none;
+    padding: 25px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5) ;
+    border-top: 1px solid rgba(225, 225, 225, 0.05);
+    margin-left: -50px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.navegacion a:hover{
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.navegacion a::after{
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2.5px;
+    bottom: -6px;
+    background: #fff;
+    border-radius: 4px;
+    transform-origin: top;
+    transform: scaleX(0);
+    transition: transform .5s;
+    
+}
+
+.navegacion a:hover::after{
+    transform: scaleX(1);
+    
+}
+
+.navegacion .btnpopup{
+    width: 130px;
+    height: 50px;
+    position: relative;
+    background: transparent;
+    border: 2px solid;
+    border-radius: 5px;
+    border-width: 10px;
+    border-color: transparent;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #fff;
+    
+}
+
+.navegacion .btnpopup:hover{
+    background: #fff;
+    color: #000;
+}
+
