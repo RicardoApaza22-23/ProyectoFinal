@@ -17,12 +17,13 @@ from django.contrib import admin
 from django.urls import path
 from webserviceapp import views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/',views.login),
     path('loginPOST/', views.loginPOST),
     path('register/', views.register),
     path('registerPOST/', views.registerPOST),
-    path('home/', views.home_page),
+    path('home/', views.goHome),
     
 ]
