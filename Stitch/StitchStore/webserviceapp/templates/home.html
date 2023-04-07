@@ -53,7 +53,7 @@
     </div>
     <div class="nav-prendas">
         <div class="prendas">
-            <h2>Ropa</h2>
+       
             <ul>
                 <li><a href="/login/">Chaquetas</a></li>
                 <li><a href="/login/">Camisetas</a></li>
@@ -61,6 +61,13 @@
                 <li><a href="/login/">Sneakers</a></li>
             </ul>
         </div>
+    </div>
+
+    <div class="productos">   
+
+        {% for producto in productoList  %} 
+            <h1>{{ producto.nombre }} </h1> 
+        {% endfor %}
     </div>
 </body>
 
