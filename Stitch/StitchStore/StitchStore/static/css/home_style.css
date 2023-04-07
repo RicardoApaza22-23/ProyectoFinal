@@ -100,9 +100,9 @@ body{
 .nav-prendas .prendas{
     position: relative;
     width: 200px;
-    height: 100px;
-    padding: 400px 88px;
-
+    height: 80px;
+    padding: 300px 60px;
+    text-align: center;
     margin-top: 250px;
     margin-left: 90px;
     padding-top: 20px;
@@ -110,19 +110,49 @@ body{
     
 
 }
-.nav-prendas .prendas h2{
+/* .nav-prendas .prendas h2{
     color:#fff;
     text-transform: uppercase;
     text-align: center;
     margin-bottom: 30px;
     
-}
+} */
 .nav-prendas .prendas ul li{
+
     list-style: none;
-    padding: 25px;
+    padding:55px 20px;
+    
     border-bottom: 1px solid rgba(0, 0, 0, 0.5) ;
     border-top: 1px solid rgba(225, 225, 225, 0.05);
-    margin-left: -50px;
+    margin-left: -40px;
+    background-color: #242323;
+   
+}
+
+
+.nav-prendas .prendas a{
+    position: relative;
+    background: transparent;
+    border: 2px solid;
+    border-radius: 5px;
+    border-width: 10px;
+    text-decoration: none;
+    border-color: transparent;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #fff;
+}
+
+
+.nav-prendas .prendas a:hover{
+    background: #fff;
+    color: #000;
+    
+}
+
+.productos{
+    text-align: center;
+    background-color: red;
 }
 
 
@@ -138,6 +168,17 @@ body{
 
 
 
+/* 
+.navegacion a{
+    position: relative;
+    font-size: 1.1em;
+    font-size: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+    color: black
+
+}
 .navegacion a:hover{
     color: inherit;
     cursor: pointer;
@@ -183,4 +224,4 @@ body{
     background: #fff;
     color: #000;
 }
-
+ */
