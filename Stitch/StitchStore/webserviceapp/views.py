@@ -1,11 +1,13 @@
 from django.shortcuts import render
 import json
 from django.http import JsonResponse
-from .models import Usuarios
+from .models import Usuarios, Producto
 from django.contrib.auth.hashers import make_password, check_password
 import re
 import jwt
 from django.shortcuts import redirect
+from django.urls import reverse
+
 # ---------------------usuarios--------------------#
 
 # Create your views here.
@@ -56,12 +58,9 @@ def loginPOST(request):
         # falta: hashear la contraseña
         # if check_password(password,usuario.password):
         if password == usuario.password:
-            #si el usuario esta registrado, se redirige a la homepage
-            #falta: redirigir bien la url
-            #return JsonResponse({"status": "login correcto"})
-            return redirect("/home/")
-        
-
+            
+            return redirect('/home/')
+            
         else:
             # falta: reenviar a un html de error
             return JsonResponse({"status": "contraseña incorrecta"})
@@ -69,14 +68,50 @@ def loginPOST(request):
         # falta: reenviar a un html de error
         return JsonResponse({"status": "nombre de usuario no coincide en la BD"})
 
+
+# cuando se logeo redirige a la homepage
+def goHome(request):
+    productoData = Producto.objects.all()
+    
+    for producto in productoData:
+        productoList = {}
+        productoList['id'] = producto.id
+        productoList['nombre'] = producto.nombre
+        productoList['estado'] = producto.estado
+        productoList['propietario'] = producto.propietario.id
+        productoList['precio'] = producto.precio
+        productoList['foto'] = producto.foto
+        productoList['fecha_subida'] = producto.fecha_subida
+        productoList['talla'] = producto.talla
+        productoList['descripcion'] = producto.descripcion
+    context = {
+        "no" : "asdasd"
+    }
+        
+    #return redirect(reverse(request,"home.html",productoList))
+
+    return render(request,"home.html",context)
+    
+    # home_page = redirect('/home/')
+    # return home_page
+
+
+# def home_page(request):
+#     # return redirect("/home")
+#     gohome = redirect('/home/')
+#     return gohome
+#     #return goHome()
+
+
+
+
+
 # visualizar la pantalla de registro
-
-
 def register(request):
     return render(request, "register.html")
+
+
 # metodo para comparar dos contraseñas(o cualquier variable)
-
-
 def compara_datos(dato1, dato2):
     if dato1 == dato2:
         return True
@@ -201,6 +236,6 @@ def registerPOST(request):
     
 
 #---------------------------------------------------#
-    
-def home_page(request):
-    return render(request,"home.html")
+
+#---------------------productos-------------------------#
+
