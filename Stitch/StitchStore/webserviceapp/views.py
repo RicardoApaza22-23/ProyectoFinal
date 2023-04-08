@@ -58,7 +58,7 @@ def loginPOST(request):
         # falta: hashear la contraseña
         # if check_password(password,usuario.password):
         if password == usuario.password:
-            
+            #redirigmos al homepage
             return redirect('/home/')
             
         else:
@@ -71,26 +71,15 @@ def loginPOST(request):
 
 # cuando se logeo redirige a la homepage
 def goHome(request):
+    #recogemos todos los productos de la bd
     productoData = Producto.objects.all()
-    
-    for producto in productoData:
-        productoList = {}
-        productoList['id'] = producto.id
-        productoList['nombre'] = producto.nombre
-        productoList['estado'] = producto.estado
-        productoList['propietario'] = producto.propietario.id
-        productoList['precio'] = producto.precio
-        productoList['foto'] = producto.foto
-        productoList['fecha_subida'] = producto.fecha_subida
-        productoList['talla'] = producto.talla
-        productoList['descripcion'] = producto.descripcion
-    context = {
-        "no" : "asdasd"
-    }
-        
+    #guardamos variable que contiene todos los productos en un diccionario y la pasamos al html
+    productoContext={
+    "productos" :  productoData
+    }  
     #return redirect(reverse(request,"home.html",productoList))
-
-    return render(request,"home.html",context)
+    
+    return render(request,"home.html",productoContext)
     
     # home_page = redirect('/home/')
     # return home_page
