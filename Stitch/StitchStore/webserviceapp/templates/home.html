@@ -21,6 +21,7 @@
 
 
     <div class="encabezado">
+
         <nav class="navegacionHome">
             <a href="/login/">HOMBRE</a>
             <a href="/login/">MUJER</a>
@@ -30,7 +31,7 @@
             <a href="/register/" class="btnpopup">REGISTRARSE</a>
 
 
-            <div class="menu">
+            <!-- <div class="menu"> -->
                 <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="true">
                     CATEGORÍAS
@@ -41,34 +42,86 @@
                     <li><a class="drop" href="#">Otoño</a></li>
                     <li><a class="drop" href="#">Invierno</a></li>
                 </ul>
+            <!-- <div class="icono-favoritos"> -->
+                <i class="fa-solid fa-heart"></i>
+            <!-- </div> -->
+            <!-- <div class="icono-car"> -->
+                <i class="fa-solid fa-cart-shopping"></i>
+            <!-- </div> -->
+            <!-- </div> -->
 
-            </div>
-            <div class="formBuscar">
+            <!-- <div class="formBuscar"> -->
                 <form class="form-buscar">
                     <input class="buscar" id="buscar" type="search" placeholder="buscar" aria-label="Search">
                     <button class="btn btn-dark" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </form>
-            </div>
+            <!-- </div> -->
+
+
         </nav>
     </div>
-    <div class="nav-prendas">
-        <div class="prendas">
-       
+    <section class="nav-prendas">
+    <div class="prendas">
+        
             <ul>
-                <li><a href="/login/">Chaquetas</a></li>
+                <div class="prenda-box">
+                <li><a href="/login/">Chaquetas</a></li>  
+       
                 <li><a href="/login/">Camisetas</a></li>
+            
+               
                 <li><a href="/login/">Pantalones</a></li>
+        
+               
                 <li><a href="/login/">Sneakers</a></li>
+            </div>
             </ul>
+        
+    </div>
+</section>
+    <!-- {% for prod in productos %}
+    <h1>{{ prod.nombre }} </h1>
+    {% endfor %} -->
+
+
+
+
+    <section class="section-productos">
+        <div class="productos-contenido">
+            <div class="producto-box">
+                <img class="fotoProducto" src="{% static '/img/logo2.png' %}"  alt="fotoProducto" />
+                <h2 class="producto-titulo">producto1</h2>
+                <span class="precio">29$</span>
+            </div>
+            <div class="producto-box">
+                <img class="fotoProducto" src="{% static '/img/logo2.png' %}"  alt="fotoProducto" />
+                <h2 class="producto-titulo">producto1</h2>
+                <span class="precio">29$</span>
+            </div>
+            <div class="producto-box">
+                <img class="fotoProducto" src="{% static '/img/logo2.png' %}"  alt="fotoProducto" />
+                <h2 class="producto-titulo">producto1</h2>
+                <span class="precio">29$</span>
+            </div>
+            <div class="producto-box">
+                <img class="fotoProducto" src="{% static '/img/logo2.png' %}"  alt="fotoProducto" />
+                <h2 class="producto-titulo">producto1</h2>
+                <span class="precio">29$</span>
+            </div>
+            <div class="producto-box">
+                <img class="fotoProducto" src="{% static '/img/logo2.png' %}"  alt="fotoProducto" />
+                <h2 class="producto-titulo">producto1</h2>
+                <span class="precio">29$</span>
+            </div>
+            <div class="producto-box">
+                <img class="fotoProducto" src="{% static '/img/logo2.png' %}"  alt="fotoProducto" />
+                <h2 class="producto-titulo">producto1</h2>
+                <span class="precio">29$</span>
+            </div>
         </div>
-    </div>
+  
+    </section>
 
-    <div class="productos">   
-
-        {% for producto in productoList  %} 
-            <h1>{{ producto.nombre }} </h1> 
-        {% endfor %}
-    </div>
 </body>
 
 </html>
