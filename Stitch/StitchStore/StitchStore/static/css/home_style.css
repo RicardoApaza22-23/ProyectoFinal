@@ -1,17 +1,23 @@
-
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins',sans-serif;
-    
-} 
+    font-family: 'Poppins', sans-serif;
+
+
+    scroll-padding-top: 2rem;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+
+
+}
+
 /* ---------------------------navegacion------------------------ */
-header{
-    position: fixed;
+header {
+
     top: 0;
     left: 0;
-    width: 102%;
+    width: 100%;
     padding: 4px 90px;
     background-color: transparent;
     justify-content: center;
@@ -20,16 +26,32 @@ header{
     display: flex;
     align-items: center;
     z-index: 99;
-  
+    background-color: blue;
+    /* 
+    padding: 130px;
+    font-size: 1.1em 2px; 
+    text-decoration: none;
+
+    text-align: center;
+    font-weight: 600;
+    padding-bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 20px; 
+    justify-content: space-between ;
+    color: black;
+    background-color: red; */
 
 }
 
-body{  
+
+body {
     min-height: 100vh;
-    background: linear-gradient(to bottom, #c1ddd1 ,#8a9b94); 
-    
+    background: linear-gradient(to bottom, #c1ddd1, #8a9b94);
+
 }
-.navegacion a{
+
+.navegacion a {
     position: relative;
     font-size: 1.1em;
     font-size: #fff;
@@ -37,33 +59,38 @@ body{
     font-weight: 500;
     margin-left: 40px;
     color: black
-
 }
 
 .navegacionHome {
-    position:absolute;
-    padding: 100px;
-    font-size: 1.1em 2px; 
+
+    padding: 130px;
+    font-size: 1.1em 2px;
     text-decoration: none;
     /* display: flex; */
     text-align: center;
-    font-weight: 600;
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 20px; 
-    justify-content: space-between ;
+    font-weight: 400;
+    padding: 10px 10px;
+
+    font-size: 20px;
+    justify-content: space-between;
     color: black;
-    
+    background-color: red;
+
+
 }
 
-.menu{
-    position: absolute;
-    margin-left: 70%;
+.navegacionHome i {
+    cursor: pointer;
+}
+
+.menu {
+    display: flex;
+    margin-left: 78%;
     margin-top: -33px;
 }
 
 
- .encabezado a{
+.encabezado a {
     position: relative;
     font-size: 1.1em;
     text-decoration: none;
@@ -71,66 +98,104 @@ body{
     margin-left: 40px;
     color: black;
     padding-left: 1%;
-   
 
-} 
-.formBuscar{
-    position: relative;
+
+}
+
+.formBuscar {
+    /* position: relative;  */
+    display: grid;
     margin-left: 59.795rem;
     margin-top: 14px;
 
-    
+
 }
 
-.buscar{
-    border: 2px solid #eee; 
-    border-radius:7px;
+
+
+.buscar {
+    border: 2px solid #eee;
+    border-radius: 7px;
     height: 37px;
 }
-.fa-magnifying-glass{
+
+/* .fa-heart{
+    position: relative;
+    margin-left: 140%;
+    
+    color: rgb(255, 255, 255);
+
+} */
+
+.navegacionHome .icono-favoritos {
+    position: absolute;
+
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: black;
+    box-sizing: border-box;
+    width: 60px;
+    margin-left: 81%;
+
+}
+
+.icono-car {
+    position: absolute;
+
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: black;
+
+
+    box-sizing: border-box;
+    width: 60px;
+    margin-left: 84%;
+}
+
+
+
+.fa-magnifying-glass {
     margin-bottom: 0.5px;
 }
 
-.nav-prendas{
-    display: flex;
+.nav-prendas {
     position: absolute;
 
+    display: flex;
+
+    background-color: rebeccapurple;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, auto));
+    text-align: center;
+
+
 }
 
-.nav-prendas .prendas{
+.nav-prendas .prenda-box {
     position: relative;
-    width: 200px;
-    height: 80px;
-    padding: 300px 60px;
-    text-align: center;
-    margin-top: 250px;
-    margin-left: 90px;
-    padding-top: 20px;
-    padding-left: 5px;
-    
 
 }
-/* .nav-prendas .prendas h2{
-    color:#fff;
-    text-transform: uppercase;
-    text-align: center;
-    margin-bottom: 30px;
-    
-} */
-.nav-prendas .prendas ul li{
+
+
+
+
+
+.nav-prendas .prendas ul li {
 
     list-style: none;
-    padding:55px 20px;
-    
-    border-bottom: 1px solid rgba(0, 0, 0, 0.5) ;
+    padding: 55px 20px;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
     border-top: 1px solid rgba(225, 225, 225, 0.05);
     margin-left: -40px;
     background-color: #242323;
-   
+
 }
 
 
-.nav-prendas .prendas a{
+.nav-prendas .prendas a {
     position: relative;
     background: transparent;
     border: 2px solid;
@@ -144,84 +209,73 @@ body{
 }
 
 
-.nav-prendas .prendas a:hover{
+.nav-prendas .prendas a:hover {
     background: #fff;
     color: #000;
-    
+
 }
 
-.productos{
+/* .mostrar-producto{ 
+    position: relative;
+    display: flex;
     text-align: center;
-    background-color: red;
+    background-color: blue;
+    width: 74%;
+    height: 100%;
+    
+    text-align: left;
+    
+    margin-left: 20%;
+    justify-content: space-between;
+    /* m
+    padding-top: 20px;
+    padding-left: 5px;
+    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 
-.navegacion a{
+.producto{
     position: relative;
-    font-size: 1.1em;
-    font-size: #fff;
-    text-decoration: none;
-    font-weight: 500;
-    margin-left: 40px;
-    color: black
+    display: flex;
+    
+    background-color: rgb(201, 201, 221);
+    
+    margin-left: 20%;
+} */
 
-}
-.navegacion a:hover{
-    color: inherit;
-    cursor: pointer;
-    text-decoration: none;
-}
 
-.navegacion a::after{
-    content: '';
-    position: absolute;
-    left: 0;
+/* contenido de los productos */
+
+.container {
+    max-width: 1068px;
+    margin: auto;
     width: 100%;
-    height: 2.5px;
-    bottom: -6px;
-    background: #fff;
-    border-radius: 4px;
-    transform-origin: top;
-    transform: scaleX(0);
-    transition: transform .5s;
-    
+
 }
 
-.navegacion a:hover::after{
-    transform: scaleX(1);
-    
+.fotoProducto {
+    width: 220px;
 }
 
-.navegacion .btnpopup{
-    width: 130px;
-    height: 50px;
+section {
+    padding: 4rem 0 3rem;
+}
+
+.productos-contenido {
     position: relative;
-    background: transparent;
-    border: 2px solid;
-    border-radius: 5px;
-    border-width: 10px;
-    border-color: transparent;
-    cursor: pointer;
-    font-size: 1.1em;
-    color: #fff;
-    
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, auto));
+    background-color: green;
+    /* ----- */
+    margin-left: 20%;
+    margin-right:5%;
+    /* ----- */
+    gap: 1.5rem;
 }
 
-.navegacion .btnpopup:hover{
-    background: #fff;
-    color: #000;
+.producto-box {
+    position: relative;
 }
- */
+
+.producto-box:hover {
+    padding: 10px;
+    border: 1px solid var(--text-color);
+}
