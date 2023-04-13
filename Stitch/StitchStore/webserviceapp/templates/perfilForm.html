@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="{% static 'css/register_style.css' %}" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+  {% include "header.html" %}
+
+  <div class="formLogin">
+    <div class="titulo">
+      <legend>Registrarse</legend>
+    </div>
+    <form action="/registerPOST/" method="POST">
+      {% csrf_token %}
+
+      <!-- cambiar template si el usuario ya tiene su perfil completado-->
+
+      <div class="input-register">
+        <label for="telefono">Teléfono:</label><br />
+        <i class="fa-solid fa-envelope"></i>
+        <input type="email" id="telefono" name="telefono" required placeholder="ej: 612605215" />
+      </div>
+
+      <div class="input-register">
+        <label for="direccion">Dirección de domicilio:</label><br />
+        <i class="fa-solid fa-lock "></i>    
+
+        <!-- fa-sharp fa-solid fa-eye -->
+        <input type="text" id="direccion" name="direccion" required placeholder="ej: calle rua abc 24,3 izq" />
+      </div>
+
+      <div class="input-register">
+        <label for="fecha_nacimiento">Fecha de nacimiento:</label><br />
+        <i class="fa-solid fa-lock "></i>    
+
+        <input type="date" id="fecha_nacimiento" required  name="fecha_nacimiento"/>
+
+      </div>
+
+      <div class="input-register">
+        <label for="país">País:</label><br />
+        <i class="fa-solid fa-lock "></i>    
+        <input type="text">
+   
+      </div>
+
+
+      <br /><br />
+
+      <input type="submit" id="submit" class="btn-enviar" value="registrar" /><br />
+      <br />
+
+      <a href="/login/" class="link">Ya tienes una cuenta? Inicia sesión</a>
+
+    </form>
+    <script src="{% static 'js/register.js' %}"></script>
+</body>
+
+</html>
