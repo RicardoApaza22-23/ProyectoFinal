@@ -31,9 +31,20 @@
         <a href="#">CONTÁCTOS</a>
         <a href="#">SERVICIOS</a>
         {% comment %} si esta en register: hay que poner el enlace de login o quitar el siguiente enlace{% endcomment %}
+        {% if request.COOKIES.usuario %}
+        <a href="/logOut/" class="btnpopup">SALIR</a>
+        {% else %}
         <a href="/register/" class="btnpopup">REGISTRARSE</a>
+        <a href="/login/" class="btnpopup-login">LOGIN</a>
+        {% endif %}
+        
+        
+     
+        
+  
 
       </nav>
     </header>
   </body>
 </html>
+
