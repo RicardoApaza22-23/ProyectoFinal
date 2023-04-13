@@ -84,7 +84,27 @@ header{
     color: #000;
 }
 
+.navegacion .btnpopup-login{
+    width: 130px;
+    height: 50px;
+    position: relative;
+    background: transparent;
+    border: 2px solid;
+    border-radius: 5px;
+    border-width: 10px;
+    border-color: transparent;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #000;
+    font-weight: bold;
+}
 
+.navegacion .btnpopup-login:hover{
+    background: #000;
+    color: #fff;
+
+
+}
 
 body{
     background: linear-gradient(to left, #347056 ,#082016);
