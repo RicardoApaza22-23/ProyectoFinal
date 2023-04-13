@@ -39,8 +39,6 @@ def nickname_existe_en_bd(request, nickname):
         return False
 
 # metodo para iniciar sesion
-
-
 def loginPOST(request):
     # validamos el método del formulario
     if (request.method != 'POST'):
@@ -59,7 +57,11 @@ def loginPOST(request):
         # if check_password(password,usuario.password):
         if password == usuario.password:
             #redirigmos al homepage
-            return redirect('/home/')
+            
+            homepage = redirect('/home/')
+            homepage.set_cookie('usuario',nickname)
+           
+            return homepage
             
         else:
             # falta: reenviar a un html de error
@@ -67,6 +69,21 @@ def loginPOST(request):
     else:
         # falta: reenviar a un html de error
         return JsonResponse({"status": "nombre de usuario no coincide en la BD"})
+
+
+#metodo para cerrar la sesion y borrar todas las cookies
+def LogOut(request):
+    logout = redirect('/login/')
+    logout.delete_cookie('usuario')
+    return logout
+
+
+def perfilForm(request):   
+    return render(request,"perfilForm.html")
+
+
+def perfilPost(request):
+    return JsonResponse({"status": "perfil"})
 
 
 # cuando se logeo redirige a la homepage
