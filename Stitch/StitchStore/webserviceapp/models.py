@@ -122,6 +122,19 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
+class Perfil(models.Model):
+    id_usuario = models.ForeignKey('Usuarios', models.DO_NOTHING, db_column='id_usuario')
+    telefono = models.CharField(max_length=20)
+    direccion = models.CharField(max_length=250)
+    fecha_nacimiento = models.DateField()
+    pais = models.CharField(max_length=200)
+    dni = models.CharField(db_column='DNI', max_length=8)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'perfil'
+
+
 class Producto(models.Model):
     nombre = models.CharField(max_length=250)
     estado = models.CharField(max_length=50)
