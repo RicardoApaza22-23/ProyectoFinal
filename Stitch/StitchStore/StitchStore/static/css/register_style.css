@@ -121,7 +121,7 @@ body{
     height: 750px;
     background-color: rgb(170, 187, 186);
     text-align: center;   
-    padding-top:5px;
+    padding-top:8px;
     border-radius: 7px;
    
     
@@ -181,6 +181,7 @@ body{
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    
 }
 
     
