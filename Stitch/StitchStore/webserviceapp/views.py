@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 import json
 from django.http import JsonResponse
 from .models import Usuarios, Producto, Perfil
@@ -32,8 +32,8 @@ def loginPOST(request):
 
         password = requestForm.get('password')
         # falta: hashear la contraseña
-        # if check_password(password,usuario.password):
-        if password == usuario.password:
+        if check_password(password,usuario.password):
+        #if password == usuario.password:
             # redirigmos al homepage
 
             homepage = redirect('/home/')
@@ -219,7 +219,7 @@ def registerPOST(request):
                                 datosUser = {
                                     'nombre': newUser.nombre.upper()
                                 }
-                                # newUser.save()
+                                newUser.save()
                                 # falta: guardar los datos en la sesion
                                 # return JsonResponse({"status":"usuario registrad"})
                                 return render(request, "succesfully/registerDone.html", datosUser)
@@ -248,9 +248,17 @@ def registerPOST(request):
 #-----------------------------------PERFIL
 
 
-
+#metodo que redirige al usuario a un formulario para competar el perfil si el usuario no lo ha hecho todavía,
+#si el usuario ya completó el perfil, se mostrará sus datos completos
 def perfilForm(request):
-    return render(request, "perfilForm.html")
+    usuario_logeado= request.COOKIES.get('usuario')
+    usuario = Usuarios.objects.get(nombre = usuario_logeado) 
+    usuario_id = Perfil.objects.filter(id_usuario = usuario.id).exists()
+    if usuario_id:
+        return render(request,"mostrarPerfil.html")
+    else:
+        return render(request, "perfilForm.html")
+    
 
 #metodo para completar el perfil del usuario
 def perfilFormPost(request):
@@ -264,17 +272,32 @@ def perfilFormPost(request):
     telefono_input = requestForm.get('telefono')
     dni_input = requestForm.get('DNI')
     region_input = requestForm.get('pais')
+    direccion_input = requestForm.get('direccion')
+    fecha_nacimiento_input = requestForm.get("fecha_nacimiento")
     perfil_usuario = Perfil()
-    
-    usuario = Usuarios.objects.get(nombre=usuario_nombre)
+    usuario = Usuarios.objects.get(nombre = usuario_nombre)
+    usuario_id = get_object_or_404(Usuarios,id = usuario.id)
+    #falta: se podría validar  el el telefono desde template con phonenumber() lirbería
     if telefono_existe_en_bd(request,telefono_input)==False:
         pass
         if dni_existe_en_bd(request,dni_input)==False:
             pass
             if region_input  in regionList:
                 pass
-                return JsonResponse({"status" : "todo ok"})
-        
+
+                perfil_usuario.id_usuario = usuario_id
+                perfil_usuario.telefono = telefono_input
+                perfil_usuario.dni = dni_input        
+                perfil_usuario.pais = region_input
+                perfil_usuario.fecha_nacimiento = fecha_nacimiento_input
+                perfil_usuario.direccion = direccion_input
+                #perfil_usuario.save()
+                #falta: corroborar si funciona
+                datosUser={
+                    'nombre' : usuario.nombre
+                }
+                return render(request, "succesfully/perfilDone.html", datosUser)
+                
             
     
     
