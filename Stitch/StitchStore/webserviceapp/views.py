@@ -1,4 +1,4 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render, get_object_or_404
 import json
 from django.http import JsonResponse
 from .models import Usuarios, Producto, Perfil
@@ -10,13 +10,17 @@ from django.urls import reverse
 
 # -------------------------------------------------------USUARIOS---------------------------------------------------#
 
-#--------------------------------LOGIN Y LOGOUT
+# --------------------------------LOGIN Y LOGOUT
 
 # Create your views here.
+
+
 def login(request):
     return render(request, "login.html")
 
 # metodo para iniciar sesion
+
+
 def loginPOST(request):
     # validamos el método del formulario
     if (request.method != 'POST'):
@@ -26,27 +30,24 @@ def loginPOST(request):
 
     # le asignamos un valor del form para cada variable
     nickname = requestForm.get('nickname')
+    # comprobamos si el nickname del usuario coincide en la BD
     if ((nickname_existe_en_bd(request, nickname) == True)):
 
         usuario = Usuarios.objects.get(nombre=nickname)
-
         password = requestForm.get('password')
-        # falta: hashear la contraseña
-        if check_password(password,usuario.password):
-        #if password == usuario.password:
-            # redirigmos al homepage
-
+        # si el nombre está bien, comparamos la contraseá con la contraseña hasheada de ese usuario guardada en la BD
+        if check_password(password, usuario.password):
+            # redirigmos al homepage Y guardamos el nombre del usuario en una cookie
             homepage = redirect('/home/')
             homepage.set_cookie('usuario', nickname)
-
             return homepage
 
         else:
-            # falta: reenviar a un html de error
-            return JsonResponse({"status": "contraseña incorrecta"})
+
+            return render(request, "errors/errorPass.html")
     else:
         # falta: reenviar a un html de error
-        return JsonResponse({"status": "nombre de usuario no coincide en la BD"})
+        return render(request, "errors/errorNickname.html")
 
 
 # metodo para cerrar la sesion y borrar todas las cookies
@@ -56,10 +57,7 @@ def LogOut(request):
     return logout
 
 
-
-
-
-#-------------------------------VALIDACIONES DE COMPARACIÓN
+# -------------------------------VALIDACIONES DE COMPARACIÓN
 
 # método para verificar si el usuario  existe en la base de datos
 def nickname_existe_en_bd(request, nickname):
@@ -90,14 +88,14 @@ def email_check(email):
         return False
 
 # método para validar un email existente
+
+
 def email_existe_en_bd(request, email_form):
     email_exist = Usuarios.objects.filter(email=email_form).exists()
     if email_exist:
         return True
     else:
         return False
-
-
 
 
 # metodo para validar el nickname
@@ -118,15 +116,19 @@ def password_validate(password):
         return True
     else:
         return False
-    
-# metodo para verificar que al registrarse, no contiene nigún campo vacío    
+
+# metodo para verificar que al registrarse, no contiene nigún campo vacío
+
+
 def campo_vacio_de_usuarios(nombre, email, password, rol):
     if len(nombre) == 0 or len(email) == 0 or len(password) == 0 or (rol) == "":
         return True
     else:
-        return False    
-    
+        return False
+
 # método para validar un telefono existente
+
+
 def telefono_existe_en_bd(request, telefono_form):
     tel_existe = Perfil.objects.filter(telefono=telefono_form).exists()
     if tel_existe:
@@ -135,16 +137,17 @@ def telefono_existe_en_bd(request, telefono_form):
         return False
 
 # método para validar un dni existente
+
+
 def dni_existe_en_bd(request, dni_form):
     dni_existe = Perfil.objects.filter(dni=dni_form).exists()
     if dni_existe:
         return True
     else:
         return False
-    
-    
-    
-#-----------------------------------REDIRECCIONAMIENTO
+
+
+# -----------------------------------REDIRECCIONAMIENTO
 
 # cuando se logeo redirige a la homepage
 def goHome(request):
@@ -159,13 +162,13 @@ def goHome(request):
     return render(request, "home.html", productoContext)
 
 # visualizar la pantalla de registro
+
+
 def register(request):
     return render(request, "register.html")
 
 
-
-
-#----------------------------------REGISTER
+# ----------------------------------REGISTER
 
 # metodo para registrar un usuario
 def registerPOST(request):
@@ -221,8 +224,11 @@ def registerPOST(request):
                                 }
                                 newUser.save()
                                 # falta: guardar los datos en la sesion
+                                goRegisterDoneSuccesfully = render(request, "succesfully/registerDone.html", datosUser)
+                                goRegisterDoneSuccesfully.set_cookie('usuario', nickname)
                                 # return JsonResponse({"status":"usuario registrad"})
-                                return render(request, "succesfully/registerDone.html", datosUser)
+                                # return render(request, "succesfully/registerDone.html", datosUser)
+                                return goRegisterDoneSuccesfully
                             else:
                                 # return JsonResponse({"erorr": "contraseña no coincide"})
                                 return render(request, "errors/errorPass.html")
@@ -267,7 +273,24 @@ def perfilFormPost(request):
         return None
     # guardamos los datos del formulario
     requestForm = request.POST.dict()
-    regionList = ['Afghanistan', 'Aland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia, Plurinational State of', 'Bonaire, Sint Eustatius and Saba', 'Bosnia and Herzegovina', 'Botswana', 'Bouvet Island', 'Brazil', 'British Indian Ocean Territory', 'Brunei Darussalam', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cambodia', 'Cameroon', 'Canada', 'Cape Verde', 'Cayman Islands', 'Central African Republic', 'Chad', 'Chile', 'China', 'Christmas Island', 'Cocos (Keeling) Islands', 'Colombia', 'Comoros', 'Congo', 'Congo, The Democratic Republic of the', 'Cook Islands', 'Costa Rica', "Côte d'Ivoire", 'Croatia', 'Cuba', 'Curaçao', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Ethiopia', 'Falkland Islands (Malvinas)', 'Faroe Islands', 'Fiji', 'Finland', 'France', 'French Guiana', 'French Polynesia', 'French Southern Territories', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti', 'Heard Island and McDonald Islands', 'Holy See (Vatican City State)', 'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran, Islamic Republic of', 'Iraq', 'Ireland', 'Isle of Man', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', "Korea, Democratic People's Republic of", 'Korea, Republic of', 'Kuwait', 'Kyrgyzstan', "Lao People's Democratic Republic", 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macao', 'Macedonia, Republic of', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Martinique', 'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Micronesia, Federated States of', 'Moldova, Republic of', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Niue', 'Norfolk Island', 'Northern Mariana Islands', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestinian Territory, Occupied', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn', 'Poland', 'Portugal', 'Puerto Rico', 'Qatar', 'Réunion', 'Romania', 'Russian Federation', 'Rwanda', 'Saint Barthélemy', 'Saint Helena, Ascension and Tristan da Cunha', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Martin (French part)', 'Saint Pierre and Miquelon', 'Saint Vincent and the Grenadines', 'Samoa', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Sint Maarten (Dutch part)', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Georgia and the South Sandwich Islands', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'South Sudan', 'Svalbard and Jan Mayen', 'Swaziland', 'Sweden', 'Switzerland', 'Syrian Arab Republic', 'Taiwan, Province of China', 'Tajikistan', 'Tanzania, United Republic of', 'Thailand', 'Timor-Leste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks and Caicos Islands', 'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'United States Minor Outlying Islands', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Venezuela, Bolivarian Republic of', 'Viet Nam', 'Virgin Islands, British', 'Virgin Islands, U.S.', 'Wallis and Futuna', 'Yemen', 'Zambia', 'Zimbabwe']
+    #falta: puedo meterlo todo en un radio input
+    regionList = ['Afghanistan', 'Aland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica', 'Antigua and Barbuda', 'Argentina', 'Armenia', 
+                  'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia, Plurinational State of', 
+                  'Bonaire, Sint Eustatius and Saba', 'Bosnia and Herzegovina', 'Botswana', 'Bouvet Island', 'Brazil', 'British Indian Ocean Territory', 'Brunei Darussalam', 'Bulgaria', 'Burkina Faso', 'Burundi', 
+                  'Cambodia', 'Cameroon', 'Canada', 'Cape Verde', 'Cayman Islands', 'Central African Republic', 'Chad', 'Chile', 'China', 'Christmas Island',
+                  'Cocos (Keeling) Islands', 'Colombia', 'Comoros', 'Congo', 'Congo, The Democratic Republic of the', 'Cook Islands', 'Costa Rica', "Côte d'Ivoire", 'Croatia', 'Cuba', 'Curaçao', 'Cyprus', 'Czech Republic',
+                  'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Ethiopia', 'Falkland Islands (Malvinas)', 'Faroe Islands', 'Fiji', 'Finland', 
+                  'France', 'French Guiana', 'French Polynesia', 'French Southern Territories', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti',
+                  'Heard Island and McDonald Islands', 'Holy See (Vatican City State)', 'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran, Islamic Republic of', 'Iraq', 'Ireland', 'Isle of Man', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey',
+                  'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', "Korea, Democratic People's Republic of", 'Korea, Republic of', 'Kuwait', 'Kyrgyzstan', "Lao People's Democratic Republic", 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania',
+                  'Luxembourg', 'Macao', 'Macedonia, Republic of', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Martinique', 'Mauritania', 'Mauritius', 'Mayotte', 
+                  'Mexico', 'Micronesia, Federated States of', 'Moldova, Republic of', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 
+                  'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Niue', 'Norfolk Island', 'Northern Mariana Islands', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestinian Territory, Occupied', 'Panama', 'Papua New Guinea', 'Paraguay', 
+                  'Peru', 'Philippines', 'Pitcairn', 'Poland', 'Portugal', 'Puerto Rico', 'Qatar', 'Réunion', 'Romania', 'Russian Federation', 'Rwanda', 'Saint Barthélemy', 'Saint Helena, Ascension and Tristan da Cunha', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Martin (French part)', 
+                  'Saint Pierre and Miquelon', 'Saint Vincent and the Grenadines', 'Samoa', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Sint Maarten (Dutch part)', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia',
+                  'South Africa', 'South Georgia and the South Sandwich Islands', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'South Sudan', 'Svalbard and Jan Mayen', 'Swaziland', 'Sweden', 'Switzerland', 'Syrian Arab Republic', 'Taiwan, Province of China', 'Tajikistan', 'Tanzania, United Republic of', 
+                  'Thailand', 'Timor-Leste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks and Caicos Islands', 'Tuvalu', 
+                  'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'United States Minor Outlying Islands', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Venezuela, Bolivarian Republic of', 'Viet Nam', 'Virgin Islands, British', 'Virgin Islands, U.S.', 'Wallis and Futuna', 'Yemen', 'Zambia', 'Zimbabwe']
     usuario_nombre = request.COOKIES.get('usuario')
     telefono_input = requestForm.get('telefono')
     dni_input = requestForm.get('DNI')
@@ -291,15 +314,19 @@ def perfilFormPost(request):
                 perfil_usuario.pais = region_input
                 perfil_usuario.fecha_nacimiento = fecha_nacimiento_input
                 perfil_usuario.direccion = direccion_input
-                #perfil_usuario.save()
-                #falta: corroborar si funciona
-                datosUser={
-                    'nombre' : usuario.nombre
-                }
-                return render(request, "succesfully/perfilDone.html", datosUser)
-                
-            
-    
+                perfil_usuario.save()
+
+                return render(request, "succesfully/perfilDone.html")
+                #falta: crear los template de error
+            else:
+                # return JsonResponse({"status" : "region no existe"})
+                return render(request,"errors/errorRegion.html")
+        else:
+            # return JsonResponse({"status" : "dni ya existe"})
+            return render(request,"errors/errorDNI.html")
+    else:
+        # return JsonResponse({"status" : "telefono ya existe"})
+        return render(request,"errors/errorTelefono.html")
     
 
 
