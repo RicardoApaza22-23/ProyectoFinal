@@ -28,4 +28,5 @@ urlpatterns = [
     path('logOut/', views.LogOut),
     path('usuario/perfil/',views.perfilForm),
     path('usuario/perfil/PerfilFormPost/', views.perfilFormPost),
+    path('usuario/perfil/', views.perfilFormPost),
 ]
