@@ -128,7 +128,7 @@ class Perfil(models.Model):
     direccion = models.CharField(max_length=250)
     fecha_nacimiento = models.DateField()
     pais = models.CharField(max_length=200)
-    dni = models.CharField(db_column='DNI', max_length=8)  # Field name made lowercase.
+    dni = models.CharField(db_column='DNI', max_length=10)  # Field name made lowercase.
 
     class Meta:
         managed = False
