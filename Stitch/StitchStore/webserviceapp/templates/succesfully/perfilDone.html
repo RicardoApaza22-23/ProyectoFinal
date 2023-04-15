@@ -14,7 +14,7 @@
 
     <div class="error">
           <div class="box__description-container">
-            <div><h2><strong class="success">Enhorabuena {{nombre}} !</strong></h2></div>
+            <div><h2><strong class="success">Enhorabuena {{request.COOKIES.usuario}} !</strong></h2></div>
             <div>Has completado tu perfil correctamente</div>
           </div>
           <br/>
@@ -23,6 +23,7 @@
           </div>
 <br/>
           <button class="btn-goback" onclick="history.back()">Volver</button>
+          <a href="/home/" class="btn-goback">Volver</a>
   
       </div>
    
