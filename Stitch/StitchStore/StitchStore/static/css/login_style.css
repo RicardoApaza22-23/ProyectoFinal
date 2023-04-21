@@ -258,4 +258,8 @@ strong{
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    text-decoration: none;
+}
+.btn-goback-link{
+    text-decoration: none;
 }
