@@ -28,9 +28,8 @@
       <nav class="navegacion">
         <a href="/home/">HOME</a>
         <a href="https://github.com/RicardoApaza22-23/ProyectoFinal/tree/master">CONÓCENOS</a>
+                <a href="https://cpr.afundacion.org/inicio/">SERVICIOS</a>
         
-        <a href="https://cpr.afundacion.org/inicio/">SERVICIOS</a>
-        {% comment %} si esta en register: hay que poner el enlace de login o quitar el siguiente enlace{% endcomment %}
         {% if request.COOKIES.usuario %}
         <a href="/logOut/" class="btnpopup">SALIR</a>
         {% else %}

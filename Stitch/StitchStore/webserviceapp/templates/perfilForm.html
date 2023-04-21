@@ -54,10 +54,15 @@
         <i class="fa-solid fa-calendar-days"></i>
         <input type="date" id="fecha_nacimiento" required  name="fecha_nacimiento"/>
       </div>
+
+
       <div class="input-register">
         <label for="pais">País:</label><br />
-        <i class="fa-solid fa-globe"></i>   
-        <input type="text" id="pais" name="pais" required placeholder="ej: España">
+        <i class="fa-solid fa-globe"></i>
+        
+        {% for region in regionList %}
+        
+        {% endfor %}
       </div>
   
 
