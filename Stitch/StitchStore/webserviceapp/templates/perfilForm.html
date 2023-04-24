@@ -1,78 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
+  {% load static %} {% load countries %} {% get_countries as countries %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/perfilForm_style.css' %}" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="{% static 'css/perfilForm_style.css' %}" />
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
- 
-</head>
+  <body>
+    {% include "header.html" %}
 
-<body>
-  {% include "header.html" %}
+    <div class="formLogin">
+      <div class="titulo">
+        <legend>DATOS PERSONALES</legend>
+      </div>
+      <form action="/usuario/perfil/PerfilFormPost/" method="POST">
+        {% csrf_token %}
 
-  <div class="formLogin">
-    <div class="titulo">
-      <legend>DATOS PERSONALES</legend>
+        <!-- cambiar template si el usuario ya tiene su perfil completado-->
+        <div class="input-register">
+          <label for="usuario">Usuario:</label><br />
+          <i class="fa-solid fa-envelope"></i>
+          <input
+            type="text"
+            id="usuario"
+            name="usuario"
+            readonly
+            value="{{request.COOKIES.usuario}}"
+          />
+        </div>
+
+        <div class="input-register">
+          <label for="telefono">Teléfono:</label><br />
+          <i class="fa-solid fa-envelope"></i>
+          <input
+            type="text"
+            id="telefono"
+            name="telefono"
+            required
+            placeholder="ej: 612605215"
+          />
+        </div>
+
+        <div class="input-register">
+          <label for="DNI">DNI:</label><br />
+          <i class="fa-solid fa-address-card"></i>
+          <input
+            type="text"
+            id="DNI"
+            name="DNI"
+            required
+            placeholder="ej: 11111111-X"
+          />
+        </div>
+
+        <div class="input-register">
+          <label for="direccion">Dirección de domicilio:</label><br />
+          <i class="fa-solid fa-map-location-dot"></i>
+          <input
+            type="text"
+            id="direccion"
+            name="direccion"
+            required
+            placeholder="ej: calle rua abc 24,3 izq"
+          />
+        </div>
+
+        <div class="input-register">
+          <label for="fecha_nacimiento">Fecha de nacimiento:</label><br />
+          <i class="fa-solid fa-calendar-days"></i>
+          <input
+            type="date"
+            id="fecha_nacimiento"
+            required
+            name="fecha_nacimiento"
+          />
+        </div>
+
+        <div class="input-register">
+          <label for="pais">País:</label><br />
+          <i class="fa-solid fa-globe"></i>
+          <select class="form-select" aria-label="Default select example" name="pais" id="pais">
+            {% for region in countries %}
+            <option name="pais" id="pais" value="{{ region.name}}">
+              {{ region.name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <input
+          type="submit"
+          id="submit"
+          class="btn-enviar"
+          value="registrar"
+        /><br />
+        <br />
+      </form>
     </div>
-    <form action="/usuario/perfil/PerfilFormPost/" method="POST">
-      {% csrf_token %}
-
-      <!-- cambiar template si el usuario ya tiene su perfil completado-->
-      <div class="input-register">
-        <label for="usuario">Usuario:</label><br />
-        <i class="fa-solid fa-envelope"></i>
-        <input type="text" id="usuario" name="usuario" readonly value="{{request.COOKIES.usuario}}" />
-      </div>
-
-
-      <div class="input-register">
-        <label for="telefono">Teléfono:</label><br />
-        <i class="fa-solid fa-envelope"></i>
-        <input type="text" id="telefono" name="telefono" required placeholder="ej: 612605215" />
-      </div>
-
-
-      <div class="input-register">
-        <label for="DNI">DNI:</label><br />
-        <i class="fa-solid fa-address-card"></i>
-        <input type="text" id="DNI" name="DNI" required placeholder="ej: 11111111-X" />
-      </div>
-
-      <div class="input-register">
-        <label for="direccion">Dirección de domicilio:</label><br />
-        <i class="fa-solid fa-map-location-dot"></i>
-        <input type="text" id="direccion" name="direccion" required placeholder="ej: calle rua abc 24,3 izq" />
-      </div>
-
-      <div class="input-register">
-        <label for="fecha_nacimiento">Fecha de nacimiento:</label><br />
-        <i class="fa-solid fa-calendar-days"></i>
-        <input type="date" id="fecha_nacimiento" required  name="fecha_nacimiento"/>
-      </div>
-
-
-      <div class="input-register">
-        <label for="pais">País:</label><br />
-        <i class="fa-solid fa-globe"></i>
-        
-        {% for region in regionList %}
-        
-        {% endfor %}
-      </div>
-  
-
-      <input type="submit" id="submit" class="btn-enviar" value="registrar" /><br />
-      <br />
-
-      
-
-    </form>
     <script src="{% static 'js/register.js' %}"></script>
-</body>
-
+  </body>
 </html>
