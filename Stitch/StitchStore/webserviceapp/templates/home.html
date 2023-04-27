@@ -54,10 +54,15 @@
             <button class="btn userButton" type="button" data-bs-toggle="dropdown" >
                 <i class="fa-solid fa-user user"></i>
             </button>
+            {{admin.rol}}
             <ul class="dropdown-menu ">
                 <li><a class="drop" href="/usuario/perfil">Perfil</a></li>
                 <li><a class="drop" href="#">Cesta</a></li>
                 <li><a class="drop" href="#">Carrito</a></li>
+                
+                {% if admin.rol %}
+                <li><a class="drop" href="/adminController/">Admin</a></li>
+                {%endif%}
                 <li><a class="drop" href="#">Salir</a></li>
             </ul>
 
