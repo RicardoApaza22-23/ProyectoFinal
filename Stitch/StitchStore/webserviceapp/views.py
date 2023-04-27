@@ -37,7 +37,8 @@ def loginPOST(request):
         usuario = Usuarios.objects.get(nombre=nickname)
         password = requestForm.get('password')
         # si el nombre está bien, comparamos la contraseá con la contraseña hasheada de ese usuario guardada en la BD
-        if check_password(password, usuario.password):
+        #if check_password(password, usuario.password):
+        if(password == usuario.password):
             # redirigmos al homepage Y guardamos el nombre del usuario en una cookie
             homepage = redirect('/home/')
             homepage.set_cookie('usuario', nickname)
@@ -161,7 +162,13 @@ def validar_dni(request,dni):
         return True
     else:
         return False
-        
+def es_admin(request, usuario_logeado):
+    admin = Usuarios.objects.get(nombre = usuario_logeado)
+    if(admin.rol==True):
+        return True
+    else:
+        return False
+
     
     
 # -----------------------------------REDIRECCIONAMIENTO
@@ -170,13 +177,18 @@ def validar_dni(request,dni):
 def goHome(request):
     # recogemos todos los productos de la bd
     productoData = Producto.objects.all()
-    # guardamos variable que contiene todos los productos en un diccionario y la pasamos al html
-    productoContext = {
-        "productos":  productoData
+    usuario_nombre = request.COOKIES.get('usuario')
+    admin = Usuarios.objects.get(nombre = usuario_nombre)
+    # guardamos variable que contiene todos los productos en un diccionario y la pasamos al html    
+    context = {
+        "productos":  productoData,
+        "admin" : admin
     }
+
+    
     # return redirect(reverse(request,"home.html",productoList))
 
-    return render(request, "home.html", productoContext)
+    return render(request, "home.html", context)
 
 # visualizar la pantalla de registro
 
@@ -325,7 +337,18 @@ def perfilFormPost(request):
         return render(request, "errors/errorTelefono.html")
 
 
+
+
 # ----------------------------------------------------------FINUSUARIOS----------------------------------------#
 
+
+#-----------------------------------------------------ADMIN--------------
+
+def administradorOperaciones(request):
+    usuarios = Usuarios.objects.all()
+    context = {
+        'usuarios' : usuarios
+    }
+    return render(request,"adminController.html",context)
 
 # ---------------------productos-------------------------#
