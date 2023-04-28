@@ -351,4 +351,19 @@ def administradorOperaciones(request):
     }
     return render(request,"adminController.html",context)
 
+
+def adminEditarUsuario(request,id_usuario_conectado):
+    usuario = Usuarios.objects.get(pk=id_usuario_conectado)
+    perfil = Perfil.objects.get(id_usuario = id_usuario_conectado)
+    context = { 
+        'usuario' : usuario,
+        'perfil' : perfil    
+    }
+    return render(request,"admin/editarUsuario.html",context)
+
+
+
+
+#---------------------------------------------------FINADMIN
+
 # ---------------------productos-------------------------#
