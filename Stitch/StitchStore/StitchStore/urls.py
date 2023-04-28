@@ -30,7 +30,12 @@ urlpatterns = [
     path('usuario/perfil/PerfilFormPost/', views.perfilFormPost),
     path('usuario/perfil/', views.perfilFormPost),
 <<<<<<< HEAD
+<<<<<<< HEAD
     path('adminController/',views.administradorOperaciones)
+=======
+    path('adminController/',views.administradorOperaciones),
+    path('adminController/editar/<int:id_usuario_conectado>', views.adminEditarUsuario)
+>>>>>>> main
 =======
     path('adminController/',views.administradorOperaciones),
     path('adminController/editar/<int:id_usuario_conectado>', views.adminEditarUsuario)

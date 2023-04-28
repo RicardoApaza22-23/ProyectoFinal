@@ -351,7 +351,10 @@ def administradorOperaciones(request):
     }
     return render(request,"adminController.html",context)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 def adminEditarUsuario(request,id_usuario_conectado):
     usuario = Usuarios.objects.get(pk=id_usuario_conectado)
     perfil = Perfil.objects.get(id_usuario = id_usuario_conectado)
