@@ -37,8 +37,8 @@ def loginPOST(request):
         usuario = Usuarios.objects.get(nombre=nickname)
         password = requestForm.get('password')
         # si el nombre está bien, comparamos la contraseá con la contraseña hasheada de ese usuario guardada en la BD
-        #if check_password(password, usuario.password):
-        if(password == usuario.password):
+        if check_password(password, usuario.password):
+        #if(password == usuario.password):
             # redirigmos al homepage Y guardamos el nombre del usuario en una cookie
             homepage = redirect('/home/')
             homepage.set_cookie('usuario', nickname)
@@ -351,20 +351,27 @@ def administradorOperaciones(request):
     }
     return render(request,"adminController.html",context)
 
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 def adminEditarUsuario(request,id_usuario_conectado):
     usuario = Usuarios.objects.get(pk=id_usuario_conectado)
-    perfil = Perfil.objects.get(id_usuario = id_usuario_conectado)
-    context = { 
-        'usuario' : usuario,
-        'perfil' : perfil    
+    #error: algunos usuario no tiene el perfil completado
+    perfil_existe = Perfil.objects.filter(id_usuario = id_usuario_conectado).exists()
+ 
+    if(perfil_existe):
+        perfil = Perfil.objects.get(id_usuario = id_usuario_conectado)
+        context = {
+        'usuario' : usuario,      
+        'perfil' : perfil
     }
+    else:
+        context = {
+        'usuario' : usuario
+        }
+    
     return render(request,"admin/editarUsuario.html",context)
 
-
+def editarUsuarioFormPost(request):
+    return JsonResponse({"status":"ok"})
+    
 
 
 #---------------------------------------------------FINADMIN
