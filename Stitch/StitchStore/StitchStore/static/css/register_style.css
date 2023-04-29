@@ -7,10 +7,10 @@
 }
 
 header{
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
-    width: 102%;
+    width: 100%;
     padding: 4px 80px;
     background-color: transparent;
     
@@ -108,6 +108,7 @@ header{
 
 
 body{
+    padding-top:150px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -118,7 +119,7 @@ body{
 .formLogin{
     position: relative;
     width: 400px;
-    height: 750px;
+    height: 710px;
     background-color: rgb(170, 187, 186);
     text-align: center;   
     padding-top:8px;
