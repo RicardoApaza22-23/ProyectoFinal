@@ -93,13 +93,14 @@
           {% for user in usuarios %}
           <tr>
 
-            <td>{{user.id}}</td>
+            <td><input type="hidden" id="usuario_id" name="usuario_id" value="{{user.id}}" />{{user.id}}</td>
             <td>{{user.nombre}}</td>
             <td>{{user.email}}</td>
             <td>{{user.rol}}</td>
             
-          <td><input type="hidden" nombre="editar"/><a class="btn btn-primary" href="/adminController/editar/{{user.id}}">Editar</a></td>
-          <td><input type="hidden" nombre="eliminar"/><a class="btn btn-danger" href="/adminController/eliminar/{{user.id}}">Eliminar</a></td>
+          <td><input type="hidden" name="editar"/><a class="btn btn-primary" href="/adminController/editar/{{user.id}}">Editar</a></td>
+          <td><input type="hidden" name="eliminar"/><a class="btn btn-danger" href="/adminController/eliminar/{{user.id}}">Eliminar</a></td>
+          
 
           </tr>
         </tbody>
