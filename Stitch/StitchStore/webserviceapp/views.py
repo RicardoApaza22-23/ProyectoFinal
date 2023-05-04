@@ -358,14 +358,12 @@ def perfilFormPost(request):
 
 #-----------------------------------------------------ADMIN--------------
 
-<<<<<<< HEAD
 def administradorOperaciones(request):
     usuarios = Usuarios.objects.all()
     context = {
         'usuarios' : usuarios
     }
     return render(request,"adminController.html",context)
-=======
 #un apartado temmplate para las operaciones del administrador con todo el contenido y podeeres
 def administradorOperaciones(request):
     #encontramos al usuario
@@ -385,7 +383,6 @@ def administradorOperaciones(request):
             return JsonResponse({"status" : usuario_logeado.rol})
     else:
         return JsonResponse({"status":"no hay usuario"})
->>>>>>> main
 
 def adminEditarUsuario(request,id_usuario_conectado):
     usuario = Usuarios.objects.get(pk=id_usuario_conectado)
@@ -405,11 +402,6 @@ def adminEditarUsuario(request,id_usuario_conectado):
     
     return render(request,"admin/editarUsuario.html",context)
 
-<<<<<<< HEAD
-def editarUsuarioFormPost(request):
-    return JsonResponse({"status":"ok"})
-    
-=======
 
     
     
@@ -473,7 +465,6 @@ def editarUsuarioFormPost(request):
                          "usuario": perfil_usuario.pais         
                          })
 
->>>>>>> main
 
 
 #---------------------------------------------------FINADMIN

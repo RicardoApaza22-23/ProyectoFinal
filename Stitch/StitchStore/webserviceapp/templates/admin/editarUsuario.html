@@ -17,20 +17,13 @@
 
   <div class="formLogin">
     <div class="titulo">
-<<<<<<< HEAD
       <legend>Editar usuario por ADMINISTRADOR:{{usuario.nombre}} {{request.COOKIES.usuario|upper}}</legend>
-=======
-      <legend>Editar usuario < {{usuario.nombre}} > por ADMINISTRADOR: {{request.COOKIES.usuario|upper}}</legend>
->>>>>>> main
     </div>
     <br>
     <form action="/usuarios/editarPost/" method="POST">
       {% csrf_token %}
-<<<<<<< HEAD
-=======
       <input type="hidden" id="usuario_id" name="usuario_id" value="{{usuario.id}}" />
 
->>>>>>> main
       <div class="input-register">
         <label for="nickname">Nombre de Usuario:</label><br />
         <i class="fa-solid fa-user"></i>
@@ -41,15 +34,12 @@
       <div class="input-register">
         <label for="rol">Rol de Usuario:</label><br />
         <i class="fa-solid fa-briefcase"></i>
-<<<<<<< HEAD
         <select id="rol" class="form-select">
             <option id="rol" value="1" nombre="admin" >Admin</option>
             <option id="rol" value="0" nombre="usuario">Usuario</option>
-=======
         <select id="rol" name="rol" class="form-select">
             <option id="rol" value="1" nombre="rol" >Admin</option>
             <option id="rol" value="0" nombre="rol">Usuario</option>
->>>>>>> main
         </select>
 
       </div>
