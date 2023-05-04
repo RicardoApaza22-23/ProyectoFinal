@@ -29,7 +29,10 @@ urlpatterns = [
     path('usuario/perfil/',views.perfilForm),
     path('usuario/perfil/PerfilFormPost/', views.perfilFormPost),
     path('usuario/perfil/', views.perfilFormPost),
+    
     path('adminController/',views.administradorOperaciones),
-    path('adminController/editar/<int:id_usuario_conectado>', views.adminEditarUsuario)
+    path('adminController/editar/<int:id_usuario_conectado>/', views.adminEditarUsuario),
+    path('usuarios/editarPost/',views.editarUsuarioFormPost)
+
     
 ]
