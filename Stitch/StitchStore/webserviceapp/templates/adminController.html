@@ -75,7 +75,7 @@
         </ul>
       </nav>
     </div>
-
+    
       <table class="table table-dark">
         <thead>
           <tr>
@@ -83,14 +83,16 @@
             <th scope="col">Nombre</th>
             <th scope="col">Email</th>
             <th scope="col">Rol</th>
+
             <th >Operaciones</th>
             <th >Operaciones</th>
+
           </tr>
         </thead>
         <tbody>
           {% for user in usuarios %}
           <tr>
-           
+
             <td>{{user.id}}</td>
             <td>{{user.nombre}}</td>
             <td>{{user.email}}</td>
@@ -98,9 +100,7 @@
             
           <td><input type="hidden" nombre="editar"/><a class="btn btn-primary" href="/adminController/editar/{{user.id}}">Editar</a></td>
           <td><input type="hidden" nombre="eliminar"/><a class="btn btn-danger" href="/adminController/eliminar/{{user.id}}">Eliminar</a></td>
-          
-           
-            
+
           </tr>
         </tbody>
 

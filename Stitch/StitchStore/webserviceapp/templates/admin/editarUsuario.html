@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
-
+{% load countries %} 
+{% get_countries as countries %}
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,20 +17,29 @@
 
   <div class="formLogin">
     <div class="titulo">
-      <legend>Editar usuario por ADMINISTRADOR: {{request.COOKIES.usuario|upper}}</legend>
+      <legend>Editar usuario {{usuario.nombre}} por ADMINISTRADOR: {{request.COOKIES.usuario|upper}}</legend>
     </div>
     <br>
-    <form action="/registerPOST/" method="POST">
+    <form action="/usuarios/editarPost/" method="POST">
       {% csrf_token %}
-
-      <!-- añadir seguridad de password con javascript-->
-      <input type="hidden" id="rol" name="rol" value="0" />
       <div class="input-register">
         <label for="nickname">Nombre de Usuario:</label><br />
         <i class="fa-solid fa-user"></i>
         <input type="text" id="nickname" name="nickname" required placeholder="solo letras (min:3 | max:30)" value="{{usuario.nombre}}"/><br />
 
       </div>
+
+      <div class="input-register">
+        <label for="rol">Rol de Usuario:</label><br />
+        <i class="fa-solid fa-briefcase"></i>
+        <select id="rol" class="form-select">
+            <option id="rol" value="1" nombre="admin" >Admin</option>
+            <option id="rol" value="0" nombre="usuario">Usuario</option>
+        </select>
+
+      </div>
+
+
       <div class="input-register">
         <label for="email">Email:</label><br />
         <i class="fa-solid fa-envelope"></i>
@@ -37,15 +47,15 @@
       </div>
 
       <div class="input-register">
-        <label for="password">Contraseña:</label><br />
+        <label for="password">Nueva Contraseña:</label><br />
         <i class="fa-solid fa-lock "></i>    
         <i class="bx bxs-show mostrar-ocultar"></i>
-        <!-- fa-sharp fa-solid fa-eye -->
+        
         <input type="password" id="password" name="password" required placeholder="incluye '!?¿¡' (min:6 | max:40)" />
       </div>
 
       <div class="input-register">
-        <label for="password_repeat">Vuelve a Escribir la Contraseña:</label><br />
+        <label for="password_repeat">Vuelve a Escribir la Nueva Contraseña:</label><br />
         <i class="fa-solid fa-lock "></i>    
         <i class="bx bxs-show mostrar-ocultar"></i>
 
@@ -53,13 +63,70 @@
           placeholder="incluye '!?¿¡' (min:6 | max:40)" />
 
       </div>
-      <br /><br />
+      <div class="input-register">
+        <label for="telefono">Teléfono:</label><br />
+        <i class="fa-solid fa-envelope"></i>
+        <input
+          type="text"
+          id="telefono"
+          name="telefono"
+          required
+          value="{%if perfil.telefono %}{{perfil.telefono}}{%endif%}"
+        />
+      </div>
 
-      <input type="submit" id="submit" class="btn-enviar" value="registrar" /><br />
+      <div class="input-register">
+        <label for="DNI">DNI:</label><br />
+        <i class="fa-solid fa-address-card"></i>
+        <input
+          type="text"
+          id="DNI"
+          name="DNI"
+          required
+          value="{%if perfil.dni %}{{perfil.dni}}{%endif%}"
+        />
+      </div>
+
+      <div class="input-register">
+        <label for="direccion">Dirección de domicilio:</label><br />
+        <i class="fa-solid fa-map-location-dot"></i>
+        <input
+          type="text"
+          id="direccion"
+          name="direccion"
+          required
+          placeholder="ej: calle rua abc 24,3 izq"
+          value="{%if perfil.direccion %}{{perfil.direccion}}{%endif%}"
+        />
+      </div>
+
+      <div class="input-register">
+        <label for="fecha_nacimiento">Fecha de nacimiento:</label><br />
+        <i class="fa-solid fa-calendar-days"></i>
+        <input
+          type="date"
+          id="fecha_nacimiento"
+          required
+          name="fecha_nacimiento"
+          
+        />
+      </div>
+
+      <div class="input-register">
+        <label for="pais">País:</label><br />
+        <i class="fa-solid fa-globe"></i>
+        <select class="form-select" aria-label="Default select example" name="pais" id="pais" >
+        <option name="pais" id="pais" value="{% if perfil.pais %}{{perfil.pais}}{%endif%}" selected>{% if perfil.pais %}{{perfil.pais}}{%endif%}</option>
+          {% for region in countries %}
+          <option name="pais" id="pais" value="{{region.name}}">
+            {{ region.name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
       <br />
-
-      <a href="/login/" class="link">Ya tienes una cuenta? Inicia sesión</a>
-
+      <input type="submit" id="submit" class="btn-enviar" value="Confirmar Cambios" /><br />
+      <br />
     </form>
     
     <script src="{% static 'js/register.js' %}"></script>
