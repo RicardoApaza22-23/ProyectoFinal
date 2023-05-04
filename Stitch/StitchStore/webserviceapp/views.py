@@ -9,6 +9,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django_countries.fields import CountryField
 from django_countries import countries
+from datetime import datetime
 # -------------------------------------------------------USUARIOS---------------------------------------------------#
 
 # --------------------------------LOGIN Y LOGOUT
@@ -42,6 +43,7 @@ def loginPOST(request):
             # redirigmos al homepage Y guardamos el nombre del usuario en una cookie
             homepage = redirect('/home/')
             homepage.set_cookie('usuario', nickname)
+            homepage.set_cookie('id_usuario',usuario.id)
             return homepage
 
         else:
@@ -169,6 +171,17 @@ def es_admin(request, usuario_logeado):
     else:
         return False
 
+<<<<<<< HEAD
+=======
+#validaremos la fecha para que no sea un date futuro
+def comparar_fechas(fecha_comprobar): 
+    fecha_actual =(datetime.today().strftime('%Y-%m-%d'))
+    if(fecha_actual > fecha_comprobar):
+        return True
+    else:
+        return False
+    
+>>>>>>> main
     
     
 # -----------------------------------REDIRECCIONAMIENTO
@@ -254,9 +267,10 @@ def registerPOST(request):
                                 newUser.save()
                                 # falta: guardar los datos en la sesion
                                 goRegisterDoneSuccesfully = render(
-                                    request, "succesfully/registerDone.html", datosUser)
-                                goRegisterDoneSuccesfully.set_cookie(
-                                    'usuario', nickname)
+                                request, "succesfully/registerDone.html", datosUser)
+                                goRegisterDoneSuccesfully.set_cookie('usuario', nickname)
+                                goRegisterDoneSuccesfully.set_cookie('id_usuario', newUser.id)
+                                
                                 # return JsonResponse({"status":"usuario registrad"})
                                 # return render(request, "succesfully/registerDone.html", datosUser)
                                 return goRegisterDoneSuccesfully
@@ -344,12 +358,34 @@ def perfilFormPost(request):
 
 #-----------------------------------------------------ADMIN--------------
 
+<<<<<<< HEAD
 def administradorOperaciones(request):
     usuarios = Usuarios.objects.all()
     context = {
         'usuarios' : usuarios
     }
     return render(request,"adminController.html",context)
+=======
+#un apartado temmplate para las operaciones del administrador con todo el contenido y podeeres
+def administradorOperaciones(request):
+    #encontramos al usuario
+    usuarios = Usuarios.objects.all()
+    usuario_cookie = request.COOKIES.get("usuario")
+    
+    context = {
+        'usuarios' : usuarios
+    }
+    #verificamos si el usuario es admin 
+    if(usuario_cookie):
+        usuario_logeado = Usuarios.objects.get(nombre = usuario_cookie)
+        if((usuario_logeado.rol == 1)):
+            return render(request,"adminController.html",context)
+        else:
+            #falta: añadir un template de error 
+            return JsonResponse({"status" : usuario_logeado.rol})
+    else:
+        return JsonResponse({"status":"no hay usuario"})
+>>>>>>> main
 
 def adminEditarUsuario(request,id_usuario_conectado):
     usuario = Usuarios.objects.get(pk=id_usuario_conectado)
@@ -369,9 +405,75 @@ def adminEditarUsuario(request,id_usuario_conectado):
     
     return render(request,"admin/editarUsuario.html",context)
 
+<<<<<<< HEAD
 def editarUsuarioFormPost(request):
     return JsonResponse({"status":"ok"})
     
+=======
+
+    
+    
+#abc123abc    
+def editarUsuarioFormPost(request):
+    request_form = request.POST.dict()
+    id_usuario_request = request_form["usuario_id"]
+    usuario_request = request_form["nickname"]
+    usuario_bd = Usuarios.objects.get(pk = id_usuario_request)
+    perfil_usuario = Perfil.objects.get(id_usuario = id_usuario_request)
+    if( usuario_bd.nombre != usuario_request and nickname_existe_en_bd(request,usuario_request) == False and usuario_request!=''):
+        usuario_bd.nombre = usuario_request
+        usuario_bd.save()
+    #error: rol no functiona
+    # rol_request = request_form['rol']
+    # if(rol_request != usuario_bd.rol):
+    #     usuario_bd.rol = rol_request
+    #falta: agregar return de errores
+    email_request = request_form["email"]
+    if(usuario_bd.email != email_request and email_existe_en_bd(request,email_request) == False and email_check(email_request)==True and email_request!=""):
+        usuario_bd.email = email_request
+        usuario_bd.save()
+    password_request = request_form["password"]
+    password_repeat_request = request_form["password_repeat"]
+    if(password_request != "" and password_repeat_request != ""):
+        if(password_validate(password_request) == True):
+            if (compara_datos(password_request,password_repeat_request) == True):
+                password_hasheada = make_password(password_request)
+                usuario_bd.password = password_hasheada
+                usuario_bd.save() 
+    telefono_request = request_form["telefono"]
+    if(telefono_request != perfil_usuario.telefono and telefono_request != "" and validar_telefono(request,telefono_request) == True and telefono_existe_en_bd(request,telefono_request) == False):
+        perfil_usuario.telefono = telefono_request
+        perfil_usuario.save()
+    dni_request = request_form["DNI"]
+    if(dni_request != perfil_usuario.dni and dni_request != ""):
+        if(validar_dni(request,dni_request) == True and dni_existe_en_bd(request,dni_request) == False):
+            perfil_usuario.dni = dni_request
+            perfil_usuario.save()
+    direccion_request = request_form["direccion"]
+    if(direccion_request != perfil_usuario.direccion and direccion_request != ""):
+        perfil_usuario.direccion = direccion_request
+        perfil_usuario.save()
+    fecha_nacimiento_request = request_form["fecha_nacimiento"]
+    if(fecha_nacimiento_request != "" and fecha_nacimiento_request != perfil_usuario.fecha_nacimiento):
+        if(comparar_fechas(fecha_nacimiento_request) == True):
+            perfil_usuario.fecha_nacimiento = fecha_nacimiento_request
+            perfil_usuario.save()
+    pais_request = request_form["pais"]
+    if(pais_request != "" and pais_request != perfil_usuario.pais):
+        perfil_usuario.pais = pais_request
+        perfil_usuario.save()
+
+    return JsonResponse({"usuario": usuario_bd.nombre,
+                         "usuario": usuario_bd.rol,
+                         "usuario": usuario_bd.email,
+                         "usuario": usuario_bd.password,
+                         "usuario": perfil_usuario.telefono,
+                         "usuario": perfil_usuario.direccion,
+                         "usuario": perfil_usuario.fecha_nacimiento,
+                         "usuario": perfil_usuario.pais         
+                         })
+
+>>>>>>> main
 
 
 #---------------------------------------------------FINADMIN

@@ -17,11 +17,20 @@
 
   <div class="formLogin">
     <div class="titulo">
+<<<<<<< HEAD
       <legend>Editar usuario por ADMINISTRADOR:{{usuario.nombre}} {{request.COOKIES.usuario|upper}}</legend>
+=======
+      <legend>Editar usuario < {{usuario.nombre}} > por ADMINISTRADOR: {{request.COOKIES.usuario|upper}}</legend>
+>>>>>>> main
     </div>
     <br>
     <form action="/usuarios/editarPost/" method="POST">
       {% csrf_token %}
+<<<<<<< HEAD
+=======
+      <input type="hidden" id="usuario_id" name="usuario_id" value="{{usuario.id}}" />
+
+>>>>>>> main
       <div class="input-register">
         <label for="nickname">Nombre de Usuario:</label><br />
         <i class="fa-solid fa-user"></i>
@@ -32,9 +41,15 @@
       <div class="input-register">
         <label for="rol">Rol de Usuario:</label><br />
         <i class="fa-solid fa-briefcase"></i>
+<<<<<<< HEAD
         <select id="rol" class="form-select">
             <option id="rol" value="1" nombre="admin" >Admin</option>
             <option id="rol" value="0" nombre="usuario">Usuario</option>
+=======
+        <select id="rol" name="rol" class="form-select">
+            <option id="rol" value="1" nombre="rol" >Admin</option>
+            <option id="rol" value="0" nombre="rol">Usuario</option>
+>>>>>>> main
         </select>
 
       </div>
@@ -47,7 +62,11 @@
       </div>
 
       <div class="input-register">
+<<<<<<< HEAD
         <label for="password">Contraseña:</label><br />
+=======
+        <label for="password">Nueva Contraseña:</label><br />
+>>>>>>> main
         <i class="fa-solid fa-lock "></i>    
         <i class="bx bxs-show mostrar-ocultar"></i>
         
@@ -55,7 +74,11 @@
       </div>
 
       <div class="input-register">
+<<<<<<< HEAD
         <label for="password_repeat">Vuelve a Escribir la Contraseña:</label><br />
+=======
+        <label for="password_repeat">Vuelve a Escribir la Nueva Contraseña:</label><br />
+>>>>>>> main
         <i class="fa-solid fa-lock "></i>    
         <i class="bx bxs-show mostrar-ocultar"></i>
 
