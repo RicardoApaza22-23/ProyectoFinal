@@ -38,8 +38,8 @@ def loginPOST(request):
         usuario = Usuarios.objects.get(nombre=nickname)
         password = requestForm.get('password')
         # si el nombre está bien, comparamos la contraseá con la contraseña hasheada de ese usuario guardada en la BD
-        if check_password(password, usuario.password):
-        #if(password == usuario.password):
+        #if check_password(password, usuario.password):
+        if(password == usuario.password):
             # redirigmos al homepage Y guardamos el nombre del usuario en una cookie
             homepage = redirect('/home/')
             homepage.set_cookie('usuario', nickname)
@@ -50,7 +50,7 @@ def loginPOST(request):
 
             return render(request, "errors/errorPass.html")
     else:
-        # falta: reenviar a un html de error
+        
         return render(request, "errors/errorNickname.html")
 
 
@@ -164,15 +164,13 @@ def validar_dni(request,dni):
         return True
     else:
         return False
-def es_admin(request, usuario_logeado):
-    admin = Usuarios.objects.get(nombre = usuario_logeado)
+def es_admin(request, id_usuario):
+    admin = Usuarios.objects.get(pk =id_usuario)
     if(admin.rol==True):
         return True
     else:
         return False
 
-<<<<<<< HEAD
-=======
 #validaremos la fecha para que no sea un date futuro
 def comparar_fechas(fecha_comprobar): 
     fecha_actual =(datetime.today().strftime('%Y-%m-%d'))
@@ -181,7 +179,6 @@ def comparar_fechas(fecha_comprobar):
     else:
         return False
     
->>>>>>> main
     
     
 # -----------------------------------REDIRECCIONAMIENTO
@@ -190,18 +187,25 @@ def comparar_fechas(fecha_comprobar):
 def goHome(request):
     # recogemos todos los productos de la bd
     productoData = Producto.objects.all()
-    usuario_nombre = request.COOKIES.get('usuario')
-    admin = Usuarios.objects.get(nombre = usuario_nombre)
-    # guardamos variable que contiene todos los productos en un diccionario y la pasamos al html    
+    usuario_logeado_id = request.COOKIES.get('id_usuario')
     context = {
-        "productos":  productoData,
-        "admin" : admin
+        "productos" : productoData
     }
+    if es_admin(request,usuario_logeado_id) == True:
+        admin = Usuarios.objects.get(pk = usuario_logeado_id)
+    # guardamos variable que contiene todos los productos en un diccionario y la pasamos al html    
+        context = {
+            "productos":  productoData,
+            "admin" : admin
+        }
+        return render(request, "home.html", context)
+    else:
+        return render(request,"home.html",context)
 
     
     # return redirect(reverse(request,"home.html",productoList))
 
-    return render(request, "home.html", context)
+    #return render(request, "home.html", context)
 
 # visualizar la pantalla de registro
 
@@ -265,7 +269,7 @@ def registerPOST(request):
                                     'nombre': newUser.nombre.upper()
                                 }
                                 newUser.save()
-                                # falta: guardar los datos en la sesion
+                                
                                 goRegisterDoneSuccesfully = render(
                                 request, "succesfully/registerDone.html", datosUser)
                                 goRegisterDoneSuccesfully.set_cookie('usuario', nickname)
@@ -368,29 +372,32 @@ def administradorOperaciones(request):
 def administradorOperaciones(request):
     #encontramos al usuario
     usuarios = Usuarios.objects.all()
-    usuario_cookie = request.COOKIES.get("usuario")
-    
+    usuario_id_cookie = request.COOKIES.get("id_usuario")
+    productos = Producto.objects.all()
+    #falta: subir ejemplos de productos
     context = {
-        'usuarios' : usuarios
+        'usuarios' : usuarios,
+        'productos' : productos
     }
     #verificamos si el usuario es admin 
-    if(usuario_cookie):
-        usuario_logeado = Usuarios.objects.get(nombre = usuario_cookie)
+    if(usuario_id_cookie != 0):
+        usuario_logeado = Usuarios.objects.get(pk = usuario_id_cookie)
         if((usuario_logeado.rol == 1)):
             return render(request,"adminController.html",context)
         else:
-            #falta: añadir un template de error 
-            return JsonResponse({"status" : usuario_logeado.rol})
+            
+            return render(request, "errors/errorAdmin.html")
+
     else:
         return JsonResponse({"status":"no hay usuario"})
+        #return redirect("/home/")
 
-def adminEditarUsuario(request,id_usuario_conectado):
-    usuario = Usuarios.objects.get(pk=id_usuario_conectado)
-    #error: algunos usuario no tiene el perfil completado
-    perfil_existe = Perfil.objects.filter(id_usuario = id_usuario_conectado).exists()
+def adminEditarUsuario(request,id_usuario_editar):
+    usuario = Usuarios.objects.get(pk=id_usuario_editar)
+    perfil_existe = Perfil.objects.filter(id_usuario = id_usuario_editar).exists()
  
     if(perfil_existe):
-        perfil = Perfil.objects.get(id_usuario = id_usuario_conectado)
+        perfil = Perfil.objects.get(id_usuario = id_usuario_editar)
         context = {
         'usuario' : usuario,      
         'perfil' : perfil
@@ -416,9 +423,10 @@ def editarUsuarioFormPost(request):
         usuario_bd.nombre = usuario_request
         usuario_bd.save()
     #error: rol no functiona
-    # rol_request = request_form['rol']
-    # if(rol_request != usuario_bd.rol):
-    #     usuario_bd.rol = rol_request
+    rol_request = request_form['rol']
+    if(rol_request != usuario_bd.rol):
+        usuario_bd.rol = rol_request
+        usuario_bd.save()
     #falta: agregar return de errores
     email_request = request_form["email"]
     if(usuario_bd.email != email_request and email_existe_en_bd(request,email_request) == False and email_check(email_request)==True and email_request!=""):
@@ -455,18 +463,17 @@ def editarUsuarioFormPost(request):
         perfil_usuario.pais = pais_request
         perfil_usuario.save()
 
-    return JsonResponse({"usuario": usuario_bd.nombre,
-                         "usuario": usuario_bd.rol,
-                         "usuario": usuario_bd.email,
-                         "usuario": usuario_bd.password,
-                         "usuario": perfil_usuario.telefono,
-                         "usuario": perfil_usuario.direccion,
-                         "usuario": perfil_usuario.fecha_nacimiento,
-                         "usuario": perfil_usuario.pais         
-                         })
+    return JsonResponse({"usuario": rol_request})
+
+#controlador para eliminar el usuario que se pasa por url
+def adminDeleteUsuario(request, id_usuario_eliminar):
+    usuario = Usuarios.objects.get(pk = id_usuario_eliminar)
+    usuario.delete()
+    return administradorOperaciones(request)
 
 
-
+    
+    
 #---------------------------------------------------FINADMIN
 
 # ---------------------productos-------------------------#
