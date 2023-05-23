@@ -123,13 +123,13 @@ class DjangoSession(models.Model):
 
 
 class Perfil(models.Model):
-    id_usuario = models.ForeignKey('Usuarios', models.DO_NOTHING, db_column='id_usuario')
+    id_usuario = models.ForeignKey('Usuarios', db_column='id_usuario',on_delete=models.CASCADE)
     telefono = models.CharField(max_length=20)
     direccion = models.CharField(max_length=250)
     fecha_nacimiento = models.DateField()
     pais = models.CharField(max_length=200)
     dni = models.CharField(db_column='DNI', max_length=10)  # Field name made lowercase.
-
+    
     class Meta:
         managed = False
         db_table = 'perfil'
