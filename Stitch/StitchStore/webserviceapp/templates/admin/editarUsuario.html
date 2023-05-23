@@ -17,7 +17,7 @@
 
   <div class="formLogin">
     <div class="titulo">
-      <legend>Editar usuario por ADMINISTRADOR:{{usuario.nombre}} {{request.COOKIES.usuario|upper}}</legend>
+      <legend>Editar usuario <strong>{{usuario.nombre}}</strong> por ADMINISTRADOR: {{request.COOKIES.usuario|upper}}</legend>
     </div>
     <br>
     <form action="/usuarios/editarPost/" method="POST">
@@ -34,10 +34,8 @@
       <div class="input-register">
         <label for="rol">Rol de Usuario:</label><br />
         <i class="fa-solid fa-briefcase"></i>
-        <select id="rol" class="form-select">
-            <option id="rol" value="1" nombre="admin" >Admin</option>
-            <option id="rol" value="0" nombre="usuario">Usuario</option>
         <select id="rol" name="rol" class="form-select">
+            <option id = "rol" value="0" nombre="rol" selected>Elije el rol del usuario</option>  
             <option id="rol" value="1" nombre="rol" >Admin</option>
             <option id="rol" value="0" nombre="rol">Usuario</option>
         </select>
@@ -52,11 +50,7 @@
       </div>
 
       <div class="input-register">
-<<<<<<< HEAD
-        <label for="password">Contraseña:</label><br />
-=======
         <label for="password">Nueva Contraseña:</label><br />
->>>>>>> main
         <i class="fa-solid fa-lock "></i>    
         <i class="bx bxs-show mostrar-ocultar"></i>
         
@@ -64,11 +58,7 @@
       </div>
 
       <div class="input-register">
-<<<<<<< HEAD
-        <label for="password_repeat">Vuelve a Escribir la Contraseña:</label><br />
-=======
         <label for="password_repeat">Vuelve a Escribir la Nueva Contraseña:</label><br />
->>>>>>> main
         <i class="fa-solid fa-lock "></i>    
         <i class="bx bxs-show mostrar-ocultar"></i>
 

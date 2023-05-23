@@ -44,9 +44,30 @@
             </ul>
             <!-- <div class="icono-favoritos"> -->
             <a href="#" class="a-fav"><i class="fa-solid fa-heart favoritos"></i></a>
+            <i class="fa-solid fa-cart-shopping cart-icon"></i>
+        <!-- VENTANA CARRITO  -->
+        <div class="cart">
+            <h2 class="titulo-carrito-ventana">Carrito</h2>
+            <div class="contenido-cart">
+                <div class="box-cart">
+
+                </div>
+
+            </div>
+            <!-- TOTAL PRECIO -->
+            <hr class="separar-estructura">
+            <div class="total-cart">
+                <div class="total-titulo">Total: </div>
+                <div class="total-precio"> 0€</div>
+            </div>
+            <!-- BOTON COMPRA -->
+            <button type="button" class="btn btn-light btn-compra">Comprar</button>
+            <!-- CERRAR VENTANA DE CARRITO -->
+            <i class="fa-duotone fa-x" id="cerrar-cart"></i>
+        </div>
             <!-- </div> -->
             <!-- <div class="icono-car"> -->
-            <a href="#" class="a-cart"><i class="fa-solid fa-cart-shopping cart"></i></a>
+            
             <!-- </div> -->
             <!-- </div> -->
             
@@ -101,58 +122,63 @@
 
 
 
-
+<!--CONTENIDO DE LA TIENDA-->
     <section class="section-productos">
+        <!--PRODUCTO BOX-->
         <div class="productos-contenido">
             <div class="producto-box">
                 <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
-                <h2 class="producto-titulo">producto1</h2>
-                <span class="precio">29$</span>
-            </div>
-            <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
-                <h2 class="producto-titulo">producto1</h2>
-                <span class="precio">29$</span>
-            </div>
-            <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
-                <h2 class="producto-titulo">producto1</h2>
-                <span class="precio">29$</span>
-            </div>
-            <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
-                <h2 class="producto-titulo">producto1</h2>
-                <span class="precio">29$</span>
-            </div>
-            <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
-                <h2 class="producto-titulo">producto1</h2>
-                <span class="precio">29$</span>
-            </div>
-            <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
-                <h2 class="producto-titulo">producto1</h2>
-                <span class="precio">29$</span>
-            </div>
-            <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
-                <h2 class="producto-titulo">producto1</h2>
-                <span class="precio">29$</span>
-            </div>
-            <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
-                <h2 class="producto-titulo">producto1</h2>
-                <span class="precio">29$</span>
-            </div>
-            <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
-                <h2 class="producto-titulo">producto1</h2>
-                <span class="precio">29$</span>
-            </div>
+                    <h2 class="titulo-producto">Earbuds2</h2>
+                    <span class="precio-producto">22€</span>
+               
+                    <i class="fa-solid fa-cart-shopping add-cart"></i>
+                </div>
+            
+
+            
+            
+                <div class="producto-box">
+                    <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
+                        <h2 class="titulo-producto">Earbuds3</h2>
+                        <span class="precio-producto">23€</span>
+                       
+                        <i class="fa-solid fa-cart-shopping add-cart"></i>
+                    </div>
+               
+                
+                    <div class="producto-box">
+                        <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
+                            <h2 class="titulo-producto">Earbuds4</h2>
+                            <span class="precio-producto">24€</span>
+                         
+                            <i class="fa-solid fa-cart-shopping add-cart"></i>
+                        </div>
+              
+
+                  
+                        <div class="producto-box">
+                            <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
+                                <h2 class="titulo-producto">Earbuds5</h2>
+                                <span class="precio-producto">25€</span>
+                               
+                                <i class="fa-solid fa-cart-shopping add-cart"></i>
+                            </div>
+                     
+
+                     
+                            <div class="producto-box">
+                                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
+                                    <h2 class="titulo-producto">Earbuds6</h2>
+                                    <span class="precio-producto">26€</span>
+                               
+                                    <i class="fa-solid fa-cart-shopping add-cart"></i>
+                                </div>
+                          
+
         </div>
 
     </section>
-
+    <script src="{% static 'js/cart.js' %}"></script>
 </body>
 
 </html>

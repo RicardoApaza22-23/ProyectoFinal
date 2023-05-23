@@ -25,10 +25,7 @@
   <body>
     <div class="encabezado">
       <nav class="navegacionHome">
-        <a href="/login/">HOMBRE</a>
-        <a href="/login/">MUJER</a>
-        <a href="/login/">NIÑO/a</a>
-        <a href="/login/">SERVICIOS</a>
+        
         <!-- si esta en register: hay que poner el enlace de login o quitar el siguiente enlace -->
 
         <!-- <div class="menu"> -->
@@ -39,25 +36,15 @@
           data-bs-toggle="dropdown"
           aria-expanded="true"
         >
-          ESTACIONES
+          Controller
         </button>
         <ul class="dropdown-menu">
-          <li><a class="drop" href="#">Primavera</a></li>
-          <li><a class="drop" href="#">Verano</a></li>
-          <li><a class="drop" href="#">Otoño</a></li>
-          <li><a class="drop" href="#">Invierno</a></li>
+          <li><a class="drop" href="#">Productos</a></li>
+          <li><a class="drop" href="#">Usuarios</a></li>
+          <li><a class="drop" href="#">Categorías</a></li>
+          
         </ul>
-        <!-- <div class="icono-favoritos"> -->
-        <a href="#" class="a-fav"
-          ><i class="fa-solid fa-heart favoritos"></i
-        ></a>
-        <!-- </div> -->
-        <!-- <div class="icono-car"> -->
-        <a href="#" class="a-cart"
-          ><i class="fa-solid fa-cart-shopping cart"></i
-        ></a>
-        <!-- </div> -->
-        <!-- </div> -->
+
 
         <button class="btn userButton" type="button" data-bs-toggle="dropdown">
           <i class="fa-solid fa-user user"></i>
@@ -75,11 +62,8 @@
         </ul>
       </nav>
     </div>
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> main
+          <!-- tabla usuarios-->
       <table class="table table-dark">
         <thead>
           <tr>
@@ -97,30 +81,66 @@
           {% for user in usuarios %}
           <tr>
 
-<<<<<<< HEAD
-            <td>{{user.id}}</td>
-=======
-            <td><input type="hidden" id="usuario_id" name="usuario_id" value="{{user.id}}" />{{user.id}}</td>
->>>>>>> main
+            <td id="iden">{{user.id}}</td>
+            
             <td>{{user.nombre}}</td>
             <td>{{user.email}}</td>
             <td>{{user.rol}}</td>
             
-<<<<<<< HEAD
-          <td><input type="hidden" nombre="editar"/><a class="btn btn-primary" href="/adminController/editar/{{user.id}}">Editar</a></td>
-          <td><input type="hidden" nombre="eliminar"/><a class="btn btn-danger" href="/adminController/eliminar/{{user.id}}">Eliminar</a></td>
-=======
-          <td><input type="hidden" name="editar"/><a class="btn btn-primary" href="/adminController/editar/{{user.id}}">Editar</a></td>
-          <td><input type="hidden" name="eliminar"/><a class="btn btn-danger" href="/adminController/eliminar/{{user.id}}">Eliminar</a></td>
+          <td><input type="hidden"  name="editar"/><a class="btn btn-primary" href="/adminController/editar/{{user.id}}">Editar</a></td>
+          <td><input type="hidden"  name="eliminar"/><a class="btn btn-danger" href="/adminController/eliminar/{{user.id}}" >Eliminar</a></td>
+            
           
->>>>>>> main
 
           </tr>
         </tbody>
 
         {%endfor%}
+
+      </table>
+
+      <!-- tabla productos-->
+      <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">descripcion</th>
+            <th scope="col">Estado</th>
+            <th scope="col">propietario</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Foto</th>
+            <th scope="col">Talla</th>
+            <th scope="col">fecha de subida</th>
+            <th >Operaciones</th>
+            <th >Operaciones</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in usuarios %}
+          <tr>
+
+            <td id="iden">{{user.id}}</td>
+            
+            <td>{{user.nombre}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.rol}}</td>
+            
+          <td><input type="hidden"  name="editar"/><a class="btn btn-primary" href="/adminController/editar/{{user.id}}">Editar</a></td>
+          <td id="identificador"><input type="hidden"  name="eliminar"/><a class="btn btn-danger" >Eliminar{{user.id}}</a></td>
+            
+          
+          
+         
+          </tr>
+        </tbody>
+
+        {%endfor%}
+
       </table>
     </div>
+    <input type="hidden" name="agregar" id="agregar"/> <a class="btn btn-success" href="#">Añadir Usuario</a>
   </body>
 </html>
 {% include "footer.html" %}
