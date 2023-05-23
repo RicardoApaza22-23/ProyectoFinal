@@ -30,8 +30,9 @@ urlpatterns = [
     path('usuario/perfil/PerfilFormPost/', views.perfilFormPost),
     path('usuario/perfil/', views.perfilFormPost),
     path('adminController/',views.administradorOperaciones),
-    path('adminController/editar/<int:id_usuario_conectado>/', views.adminEditarUsuario),
-    path('usuarios/editarPost/',views.editarUsuarioFormPost)
+    path('adminController/editar/<int:id_usuario_editar>/', views.adminEditarUsuario),
+    path('usuarios/editarPost/',views.editarUsuarioFormPost),
+    path('adminController/eliminar/<int:id_usuario_eliminar>',views.adminDeleteUsuario)
 
     
 ]
