@@ -27,6 +27,8 @@ def loginPOST(request):
     # validamos el método del formulario
     if (request.method != 'POST'):
         return None
+    
+    #productos = Producto.objects.all()
     # guardamos los datos del formulario
     requestForm = request.POST.dict()
 
@@ -477,3 +479,22 @@ def adminDeleteUsuario(request, id_usuario_eliminar):
 #---------------------------------------------------FINADMIN
 
 # ---------------------productos-------------------------#
+
+
+#----------------------carrito------------------------#
+
+def carrito(request):
+    if(request.COOKIES.get('id_usuario')):
+        usuario = request.COOKIES.get('id_usuario')
+        
+        
+    data = json.loads(request.body)
+    producto_id = data['id_producto']
+    producto = Producto.objects.get(pk = producto_id)
+    print("productoID : " , producto_id)
+    
+    return JsonResponse({"status" : "ok"})    
+
+#----------------------------------------FINcarrito
+
+
