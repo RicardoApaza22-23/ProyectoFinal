@@ -60,6 +60,7 @@ def loginPOST(request):
 def LogOut(request):
     logout = redirect('/login/')
     logout.delete_cookie('usuario')
+    logout.delete_cookie('id_usuario')
     return logout
 
 
@@ -193,14 +194,15 @@ def goHome(request):
     context = {
         "productos" : productoData
     }
-    if es_admin(request,usuario_logeado_id) == True:
-        admin = Usuarios.objects.get(pk = usuario_logeado_id)
-    # guardamos variable que contiene todos los productos en un diccionario y la pasamos al html    
-        context = {
-            "productos":  productoData,
-            "admin" : admin
-        }
-        return render(request, "home.html", context)
+    if usuario_logeado_id:
+        if es_admin(request,usuario_logeado_id) == True:
+            admin = Usuarios.objects.get(pk = usuario_logeado_id)
+        # guardamos variable que contiene todos los productos en un diccionario y la pasamos al html    
+            context = {
+                "productos":  productoData,
+                "admin" : admin
+            }
+            return render(request, "home.html", context)
     else:
         return render(request,"home.html",context)
 
@@ -484,17 +486,26 @@ def adminDeleteUsuario(request, id_usuario_eliminar):
 #----------------------carrito------------------------#
 
 def carrito(request):
-    if(request.COOKIES.get('id_usuario')):
-        usuario = request.COOKIES.get('id_usuario')
-        
-        
-    data = json.loads(request.body)
-    producto_id = data['id_producto']
-    producto = Producto.objects.get(pk = producto_id)
-    print("productoID : " , producto_id)
-    
-    return JsonResponse({"status" : "ok"})    
+    if(request.COOKIES.get('id_usuario') and not request.COOKIES.get('cesta')):
+        usuario = request.COOKIES.get('id_usuario')  
+        data = json.loads(request.body)
 
+        for productos in data['carrito']:
+            dataProductos = Producto.objects.get(pk = productos['id'])
+            print(productos['id'])
+            
+        #return render(request,'carrito.html')
+        return JsonResponse({"status":"ok"})
+            
+        
+    #producto = Pr]oducto.objects.get(pk = producto_id)
+    #print("productoID : " , action)
+    
+    
+    #return JsonResponse({"status" : "ok"})    
+    else:
+        #error: no funciona
+        return redirect('/login/')
 #----------------------------------------FINcarrito
 
 
