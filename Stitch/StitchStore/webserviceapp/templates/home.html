@@ -70,19 +70,24 @@ const csrftoken = getCookie('csrftoken');
         <div class="cart">
             <h2 class="titulo-carrito-ventana">Carrito</h2>
             <div class="contenido-cart">
+                
+                
+         
                 <div class="box-cart">
                     
                 </div>
+                
+
 
             </div>
             <!-- TOTAL PRECIO -->
             <hr class="separar-estructura">
-            <div class="total-cart">
+            <!-- <div class="total-cart">
                 <div class="total-titulo">Total: </div>
                 <div class="total-precio"> 0€</div>
-            </div>
+            </div> -->
             <!-- BOTON COMPRA -->
-            <button type="button" class="btn btn-light btn-compra">Comprar</button>
+            <!-- <button type="button" class="btn btn-light btn-compra" id="IrCarrito">Ir a Compra</button> -->
             <!-- CERRAR VENTANA DE CARRITO -->
             <i class="fa-duotone fa-x" id="cerrar-cart"></i>
         </div>
@@ -154,8 +159,8 @@ const csrftoken = getCookie('csrftoken');
                 <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
                     <h2 class="titulo-producto">{{prod.nombre}}</h2>
                     <span class="precio-producto">22€</span>
-               
-                    <button data-producto = "{{prod.id}}" data-action = "add"  class="add-cart-btn"> <i class="fa-solid fa-cart-shopping add-cart"></i></button>
+                    <input type="hidden" value="{{prod.id}}" class="id-producto">
+                    <i class="fa-solid fa-cart-shopping add-cart"></i>
                 </div>
                 {% endfor %} 
 
