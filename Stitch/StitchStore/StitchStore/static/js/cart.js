@@ -179,6 +179,8 @@ function procesarCompra(){
         },
         body : JSON.stringify({"carrito": cesta})
         
+    }).then((data) => {
+        location.reload()
     })
     
 }
