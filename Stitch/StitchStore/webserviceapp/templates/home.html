@@ -64,7 +64,7 @@ const csrftoken = getCookie('csrftoken');
             <!-- <div class="icono-favoritos"> -->
             <a href="#" class="a-fav"><i class="fa-solid fa-heart favoritos"></i></a>
 
-            <i class="fa-solid fa-cart-shopping cart-icon"></i>
+            <a href="/mostrarCarrito/"><i class="fa-solid fa-cart-shopping cart-icon2"></i></a>
 
         <!-- VENTANA CARRITO  -->
         <div class="cart">
@@ -152,18 +152,23 @@ const csrftoken = getCookie('csrftoken');
     <section class="section-productos">
         <!--PRODUCTO BOX-->
         <div class="productos-contenido">
+            <form method="POST">
+                {% csrf_token %}
                  {% for prod in productos %}
-
-    
+                 
+                    
             <div class="producto-box">
                 <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
                     <h2 class="titulo-producto">{{prod.nombre}}</h2>
-                    <span class="precio-producto">22€</span>
-                    <input type="hidden" value="{{prod.id}}" class="id-producto">
-                    <i class="fa-solid fa-cart-shopping add-cart"></i>
-                </div>
+                    <span class="precio-producto">{{prod.precio}}€</span>
+                    <input type="hidden" value="{{prod.id}}" id="id-producto" class="id-producto">
+                    <!-- <input type="hidden"  name="eliminar"/><a class="btn btn-danger" href="addProduct/{{prod.id}}">Añadir al Carrito</a> -->
+                    <a href="/addProduct/{{prod.id}}"><i class="fa-solid fa-cart-shopping add-cart" ></i></a>
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    
+                </div></form> 
                 {% endfor %} 
-
+            
             
             
                 <div class="producto-box">
@@ -180,6 +185,7 @@ const csrftoken = getCookie('csrftoken');
     <script src="{% static 'js/cart.js' %}">
 
     </script>
+
 </body>
 
 </html>
