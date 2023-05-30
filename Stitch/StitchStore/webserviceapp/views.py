@@ -1,15 +1,20 @@
 from django.shortcuts import render, get_object_or_404
 import json
-from django.http import JsonResponse,HttpResponse
-from .models import Usuarios, Producto, Perfil
+from django.http import JsonResponse,HttpResponse,HttpResponseRedirect
+from .models import Usuarios, Producto, Perfil, Carrito
 from django.contrib.auth.hashers import make_password, check_password
 import re
 import jwt
 from django.shortcuts import redirect
+from django.shortcuts import render
 from django.urls import reverse
 from django_countries.fields import CountryField
 from django_countries import countries
 from datetime import datetime
+from django.contrib import messages
+from random import randrange
+from django.core import serializers
+
 # -------------------------------------------------------USUARIOS---------------------------------------------------#
 
 # --------------------------------LOGIN Y LOGOUT
@@ -42,10 +47,13 @@ def loginPOST(request):
         # si el nombre está bien, comparamos la contraseá con la contraseña hasheada de ese usuario guardada en la BD
         #if check_password(password, usuario.password):
         if(password == usuario.password):
+            id_carrito = usuario.nombre +"_"+ str(randrange(1000))
             # redirigmos al homepage Y guardamos el nombre del usuario en una cookie
             homepage = redirect('/home/')
             homepage.set_cookie('usuario', nickname)
             homepage.set_cookie('id_usuario',usuario.id)
+            request.session['cesta'] = []
+            request.session['id_cesta'] = id_carrito
             return homepage
 
         else:
@@ -61,6 +69,8 @@ def LogOut(request):
     logout = redirect('/login/')
     logout.delete_cookie('usuario')
     logout.delete_cookie('id_usuario')
+    if request.session['cesta']:del request.session['cesta']
+    if request.session['id_cesta']:del request.session['id_cesta']
     return logout
 
 
@@ -485,27 +495,89 @@ def adminDeleteUsuario(request, id_usuario_eliminar):
 
 #----------------------carrito------------------------#
 
-def carrito(request):
-    if(request.COOKIES.get('id_usuario') and not request.COOKIES.get('cesta')):
-        usuario = request.COOKIES.get('id_usuario')  
-        data = json.loads(request.body)
+def addProductoCart(request,id_producto):
+    #request.session['cesta'] = []
+    # if not request.session['cesta']:
+   
+    
+    if (request.COOKIES.get('id_usuario') and request.session):
+        fecha = datetime.today().strftime('%Y-%m-%d')
+        id_usuario = request.COOKIES.get('id_usuario') 
+        usuario = Usuarios.objects.get(pk = id_usuario)
+        carrito = request.session['cesta']
+        id_carrito = request.session['id_cesta']
+        #del request.session['cesta']
+        #producto = Producto.objects.get(pk = id_producto)
+        if id_producto in carrito:
+            print("ya está añadido")
+        else:
+            carrito.append(id_producto)
+            request.session.modified = True
+            productoAdded = Producto.objects.filter(id=id_producto)
+            
+            for id_producto in carrito:
+                compra = Carrito()
+                
+                compra.id_comprador = usuario
+                producto = Producto.objects.get(pk = id_producto)
+                compra.id_producto = producto    
+                compra.nombre_producto = producto.nombre
+                compra.precio_producto = producto.precio
+                compra.fecha = fecha
+                compra.order_id = id_carrito
+                compra.cantidad = 1
+                compra.realizado = False
+            compra.save()
+            print(compra)
+            context = {
+                'producto' : productoAdded
+            }
+            return render(request,"productoAdded.html",context)
+        return redirect("/home/")
+        #return mostrarCarrito(request)
+    return redirect("/login/")    
 
-        for productos in data['carrito']:
-            dataProductos = Producto.objects.get(pk = productos['id'])
-            print(productos['id'])
-            
-        #return render(request,'carrito.html')
-        return JsonResponse({"status":"ok"})
-            
+
+def eliminarProducto(request,producto_id):
+    usuario = request.COOKIES.get('id_usuario')
+    cesta = request.session['cesta']
+    cesta_id = request.session['id_cesta']
+    carrito = Carrito.objects.get(id_producto = producto_id ,realizado = False)
+    carrito.delete()
+    return redirect("/mostrarCarrito/")
+    #return JsonResponse({"Status" : producto_id})   
+    
+    
+def mostrarCarrito(request):
+    if(request.COOKIES.get('id_usuario') and request.session):
+        #carrito = request.session['cesta']
+        #id_carrito = request.session['cesta']
+        usuario_id = request.COOKIES.get('id_usuario') 
+        #fecha_actual =(datetime.today().strftime('%Y-%m-%d'))
+        compra = Carrito.objects.filter(id_comprador = usuario_id, realizado = False)
         
-    #producto = Pr]oducto.objects.get(pk = producto_id)
-    #print("productoID : " , action)
-    
-    
-    #return JsonResponse({"status" : "ok"})    
+        #data = serializers.serialize('json',compra)
+            #return render(request,"carrito.html",context)
+        context = {
+            'cesta' : compra
+        }    
+        #return HttpResponse(data)
+        
+        
+
+        return render(request,"carrito.html",context)
+    return redirect("/login/")
+
+def comprar(request):
+    usuario_id = request.COOKIES.get('id_usuario')
+    compra = Carrito.objects.filter(id_comprador = usuario_id, realizado = False)
+    perfil = Perfil.objects.filter(id_usuario = usuario_id).exists()
+    if perfil == True:
+        compra.update(realizado = True)
+        return redirect("succesfully/comprado")
     else:
-        #error: no funciona
-        return redirect('/login/')
+        return redirect("usuario/perfil/")
+
 #----------------------------------------FINcarrito
 
 
