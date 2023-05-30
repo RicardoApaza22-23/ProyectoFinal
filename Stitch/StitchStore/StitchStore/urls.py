@@ -33,7 +33,9 @@ urlpatterns = [
     path('adminController/editar/<int:id_usuario_editar>/', views.adminEditarUsuario),
     path('usuarios/editarPost/',views.editarUsuarioFormPost),
     path('adminController/eliminar/<int:id_usuario_eliminar>',views.adminDeleteUsuario),
-    path('carrito/', views.carrito)
-
-    
+    path('addProduct/<int:id_producto>', views.addProductoCart),
+    path('eliminarProducto/<int:producto_id>',views.eliminarProducto),
+    path('mostrarCarrito/',views.mostrarCarrito),
+    path('comprar/',views.comprar)
+        
 ]
