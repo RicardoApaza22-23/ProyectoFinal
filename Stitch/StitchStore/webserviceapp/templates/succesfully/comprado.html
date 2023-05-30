@@ -1,0 +1,31 @@
+{% include "header.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Completado</title>
+    <link rel="stylesheet" href="{% static 'css/login_style.css' %}" />
+    
+</head>
+<body>
+
+    <div class="error">
+          <div class="box__description-container">
+            <div><h2><strong class="success">Enhorabuena {{request.COOKIES.usuario}} !</strong></h2></div>
+            <div>Pedido completado correctamente</div>
+          </div>
+          <br/>
+          <div class="happyStitch">
+            <img src="{% static 'img/logo.png' %}" width="220px" height="190px"  alt="sadStitch">
+          </div>
+<br/>
+          
+          <button class="btn-goback"><a href="/home/" class="btn-goback-link">Sigue Comprando</a></button>
+  
+      </div>
+   
+</body>
+</html>
