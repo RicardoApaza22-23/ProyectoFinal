@@ -77,6 +77,21 @@ class AuthUserUserPermissions(models.Model):
         unique_together = (('user', 'permission'),)
 
 
+class Carrito(models.Model):
+    id_comprador = models.ForeignKey('Usuarios', models.DO_NOTHING, db_column='id_comprador')
+    id_producto = models.ForeignKey('Producto', models.DO_NOTHING, db_column='id_producto')
+    nombre_producto = models.CharField(max_length=250, blank=True, null=True)
+    fecha = models.DateField()
+    cantidad = models.IntegerField(blank=True, null=True)
+    order_id = models.CharField(max_length=200)
+    realizado = models.IntegerField()
+    precio_producto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'carrito'
+
+
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
     object_id = models.TextField(blank=True, null=True)
@@ -123,13 +138,13 @@ class DjangoSession(models.Model):
 
 
 class Perfil(models.Model):
-    id_usuario = models.ForeignKey('Usuarios', db_column='id_usuario',on_delete=models.CASCADE)
+    id_usuario = models.ForeignKey('Usuarios', models.DO_NOTHING, db_column='id_usuario')
     telefono = models.CharField(max_length=20)
     direccion = models.CharField(max_length=250)
     fecha_nacimiento = models.DateField()
     pais = models.CharField(max_length=200)
-    dni = models.CharField(db_column='DNI', max_length=10)  # Field name made lowercase.
-    
+    dni = models.CharField(max_length=10)
+
     class Meta:
         managed = False
         db_table = 'perfil'
