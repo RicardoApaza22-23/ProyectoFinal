@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 import json
 from django.http import JsonResponse,HttpResponse,HttpResponseRedirect
-from .models import Usuarios, Producto, Perfil, Carrito
+from .models import Usuarios, Producto, Perfil, Carrito,Estacion,EstacionProducto,Etiqueta,ProductoEtiqueta,Favoritos
 from django.contrib.auth.hashers import make_password, check_password
 import re
 import jwt
@@ -201,8 +201,14 @@ def goHome(request):
     # recogemos todos los productos de la bd
     productoData = Producto.objects.all()
     usuario_logeado_id = request.COOKIES.get('id_usuario')
+    estaciones = Estacion.objects.all()
+    etiquetas_categoría = Etiqueta.objects.all().exclude(nombre = "Chaqueta").exclude(nombre = "Camiseta").exclude(nombre = "Pantalones").exclude(nombre="Sneakers")
+    etiquetas_prendas = Etiqueta.objects.all().exclude(nombre="Hombre").exclude(nombre="Mujer").exclude(nombre="Niños")
     context = {
-        "productos" : productoData
+        "productos" : productoData,
+        "estaciones" : estaciones,
+        "etiquetas" : etiquetas_categoría,
+        "prendas" : etiquetas_prendas
     }
     if usuario_logeado_id:
         if es_admin(request,usuario_logeado_id) == True:
@@ -210,25 +216,111 @@ def goHome(request):
         # guardamos variable que contiene todos los productos en un diccionario y la pasamos al html    
             context = {
                 "productos":  productoData,
-                "admin" : admin
+                "admin" : admin,
+                "estaciones" : estaciones,
+                "etiquetas" : etiquetas_categoría,
+                "prendas" : etiquetas_prendas
             }
             return render(request, "home.html", context)
     else:
         return render(request,"home.html",context)
 
+#vista para mostrar un template de los productos de cada estación
+def mostrarProductosEstacion(request,estacion_nombre):
+    estaciones = Estacion.objects.all()
+    estacion = Estacion.objects.get(nombre = estacion_nombre)
+    producto_estacion = EstacionProducto.objects.filter(id_estacion = estacion.id)
+    producto_estacion_existe = EstacionProducto.objects.filter(id_estacion = estacion.id).exists()
+    #aquí usamos el exclude porque tenemos distribuídas las etiquetas en lugares diferenes
+    etiquetas_categoría = Etiqueta.objects.all().exclude(nombre = "Chaqueta").exclude(nombre = "Camiseta").exclude(nombre = "Pantalones").exclude(nombre="Sneakers")
+    etiquetas_prendas = Etiqueta.objects.all().exclude(nombre="Hombre").exclude(nombre="Mujer").exclude(nombre="Niños")
+    #si hay productos que contengan la estación que se solicita, entonces se guarda a información de ese producto y se envía al template
+    if producto_estacion_existe:
+        ids_productos = []
+        for prod in producto_estacion:
+            ids_productos.append(prod.id_producto.id)
+        
+                
+        productosList = []
+        
+        for iden in ids_productos:
+            productos = Producto.objects.filter(id = iden)
+            
+            for prod in productos:
+                diccionario = {}
+                diccionario['id'] = prod.id
+                diccionario['nombre'] = prod.nombre
+                diccionario['precio'] = prod.precio
+                diccionario['descripcion'] = prod.descripcion
+                productosList.append(diccionario)
+
+                
+        context = {
+            'productos' : productosList,
+            'estaciones' : estaciones,
+            'etiquetas' : etiquetas_categoría,
+            'prendas' : etiquetas_prendas
+        }
+        #si el usuario es admin tendrá superpoderes
+        if request.COOKIES.get('id_usuario'):
+            id_usuario = request.COOKIES.get('id_usuario')
+            if es_admin(request,id_usuario):
+                admin = Usuarios.objects.get(id = id_usuario)
+                context['admin'] = admin
+        #fin IF
+        return render(request,"home_estacion.html",context)
+    else:#ELSE: que retorna a homepage si no existe nigún producto con la estación que se solicita
+        return redirect("/home/")
+
     
-    # return redirect(reverse(request,"home.html",productoList))
-
-    #return render(request, "home.html", context)
-
-# visualizar la pantalla de registro
-
-
-def register(request):
-    return render(request, "register.html")
-
+#vista para mostrar los productos que contengan la etiqueta que se colicita    
+def mostrarProductosEtiquetas(request, etiqueta_nombre):
+    estaciones = Estacion.objects.all()
+    #usamos exclude para separar la distribución de las etiquetas
+    etiquetas_categoría = Etiqueta.objects.all().exclude(nombre = "Chaqueta").exclude(nombre = "Camiseta").exclude(nombre = "Pantalones").exclude(nombre="Sneakers")
+    etiquetas_prendas = Etiqueta.objects.all().exclude(nombre="Hombre").exclude(nombre="Mujer").exclude(nombre="Niños")
+    etiqueta = Etiqueta.objects.get(nombre = etiqueta_nombre)
+    etiqueta_producto = ProductoEtiqueta.objects.filter(id_etiqueta = etiqueta.id)
+    etiqueta_producto_existe = ProductoEtiqueta.objects.filter(id_etiqueta = etiqueta.id).exists()
+    #si hay productos con dicha etiqueta se guarda la información para pasársela al template
+    if etiqueta_producto_existe:
+        ids_productos = []
+        for prod in etiqueta_producto:
+            ids_productos.append(prod.id_producto.id)
+        
+        productoList = [] 
+        for iden in ids_productos:
+            productos = Producto.objects.filter(id = iden)
+            for prod in productos:
+                diccionario = {}
+                diccionario['id'] = prod.id
+                diccionario['nombre'] = prod.nombre
+                diccionario['precio'] = prod.precio
+                diccionario['descripcion'] = prod.descripcion
+                productoList.append(diccionario)
+                
+        
+        context = {
+            'estaciones' : estaciones,
+            'etiquetas' : etiquetas_categoría,
+            'productos' : productoList,
+            'prendas' : etiquetas_prendas
+        }
+        #si el usuario es admin tendrá superpoderes
+        if request.COOKIES.get('id_usuario'):
+            id_usuario = request.COOKIES.get('id_usuario')
+            if es_admin(request,id_usuario) == True:
+                admin = Usuarios.objects.get(id = id_usuario) 
+                context['admin'] = admin
+                
+        return render(request,"home_etiquetas.html",context)
+    return redirect("/home/")
+    
 
 # ----------------------------------REGISTER
+ 
+def register(request):
+    return render(request, "register.html")
 
 # metodo para registrar un usuario
 def registerPOST(request):
@@ -376,12 +468,14 @@ def perfilFormPost(request):
 
 #-----------------------------------------------------ADMIN--------------
 
+#falta: mostrar operaciones sobre todas las tablas : user,producto,etiqueta,estacion
 def administradorOperaciones(request):
     usuarios = Usuarios.objects.all()
     context = {
         'usuarios' : usuarios
     }
     return render(request,"adminController.html",context)
+
 #un apartado temmplate para las operaciones del administrador con todo el contenido y podeeres
 def administradorOperaciones(request):
     #encontramos al usuario
@@ -396,6 +490,9 @@ def administradorOperaciones(request):
     #verificamos si el usuario es admin 
     if(usuario_id_cookie != 0):
         usuario_logeado = Usuarios.objects.get(pk = usuario_id_cookie)
+        if es_admin(request,usuario_logeado.id):
+            admin = Usuarios.objects.get(id = usuario_logeado.id)
+            context['admin'] = admin
         if((usuario_logeado.rol == 1)):
             return render(request,"adminController.html",context)
         else:
@@ -404,8 +501,10 @@ def administradorOperaciones(request):
 
     else:
         return JsonResponse({"status":"no hay usuario"})
-        #return redirect("/home/")
+    
 
+#método para editar los datos de los usuarios
+#enviamos la información del usuario en cuestión a un formulario dónde podremos editarlo
 def adminEditarUsuario(request,id_usuario_editar):
     usuario = Usuarios.objects.get(pk=id_usuario_editar)
     perfil_existe = Perfil.objects.filter(id_usuario = id_usuario_editar).exists()
@@ -427,12 +526,22 @@ def adminEditarUsuario(request,id_usuario_editar):
     
     
 #abc123abc    
+#Método que recibe la información enviada por el formulario cuando se edita un usuario
+#validamos todos los campos y si todo está correcto, procedemos a guardar el usuario
 def editarUsuarioFormPost(request):
     request_form = request.POST.dict()
     id_usuario_request = request_form["usuario_id"]
     usuario_request = request_form["nickname"]
     usuario_bd = Usuarios.objects.get(pk = id_usuario_request)
-    perfil_usuario = Perfil.objects.get(id_usuario = id_usuario_request)
+    
+    perfil_usuario_existe = Perfil.objects.filter(id_usuario = id_usuario_request).exists()
+    if perfil_usuario_existe:
+        perfil_usuario = Perfil.objects.get(id_usuario = id_usuario_request)
+    else:
+        perfil_usuario = Perfil()
+        perfil_usuario.id_usuario = usuario_bd
+        perfil_usuario.fecha_nacimiento = request_form["fecha_nacimiento"]
+    
     if( usuario_bd.nombre != usuario_request and nickname_existe_en_bd(request,usuario_request) == False and usuario_request!=''):
         usuario_bd.nombre = usuario_request
         usuario_bd.save()
@@ -454,6 +563,9 @@ def editarUsuarioFormPost(request):
                 password_hasheada = make_password(password_request)
                 usuario_bd.password = password_hasheada
                 usuario_bd.save() 
+                
+                
+                
     telefono_request = request_form["telefono"]
     if(telefono_request != perfil_usuario.telefono and telefono_request != "" and validar_telefono(request,telefono_request) == True and telefono_existe_en_bd(request,telefono_request) == False):
         perfil_usuario.telefono = telefono_request
@@ -472,12 +584,13 @@ def editarUsuarioFormPost(request):
         if(comparar_fechas(fecha_nacimiento_request) == True):
             perfil_usuario.fecha_nacimiento = fecha_nacimiento_request
             perfil_usuario.save()
+            
     pais_request = request_form["pais"]
     if(pais_request != "" and pais_request != perfil_usuario.pais):
         perfil_usuario.pais = pais_request
         perfil_usuario.save()
 
-    return JsonResponse({"usuario": rol_request})
+    return JsonResponse({"usuario": rol_request})   
 
 #controlador para eliminar el usuario que se pasa por url
 def adminDeleteUsuario(request, id_usuario_eliminar):
@@ -502,13 +615,19 @@ def addProductoCart(request,id_producto):
     
     if (request.COOKIES.get('id_usuario') and request.session):
         fecha = datetime.today().strftime('%Y-%m-%d')
-        id_usuario = request.COOKIES.get('id_usuario') 
-        usuario = Usuarios.objects.get(pk = id_usuario)
+        id_user = request.COOKIES.get('id_usuario') 
+        usuario = Usuarios.objects.get(pk = id_user)
         carrito = request.session['cesta']
         id_carrito = request.session['id_cesta']
         #del request.session['cesta']
         #producto = Producto.objects.get(pk = id_producto)
-        if id_producto in carrito:
+        producto_favorito_list = []
+        cesta = Carrito.objects.filter(id_comprador = id_user, realizado = False)
+        for prod in cesta:
+            producto_favorito_list.append(prod.id_producto)
+            
+        
+        if id_producto in carrito and id_producto not in producto_favorito_list:
             print("ya está añadido")
         else:
             carrito.append(id_producto)
@@ -528,7 +647,7 @@ def addProductoCart(request,id_producto):
                 compra.cantidad = 1
                 compra.realizado = False
             compra.save()
-            print(compra)
+            
             context = {
                 'producto' : productoAdded
             }
@@ -550,8 +669,7 @@ def eliminarProducto(request,producto_id):
     
 def mostrarCarrito(request):
     if(request.COOKIES.get('id_usuario') and request.session):
-        #carrito = request.session['cesta']
-        #id_carrito = request.session['cesta']
+        estaciones = Estacion.objects.all()
         usuario_id = request.COOKIES.get('id_usuario') 
         #fecha_actual =(datetime.today().strftime('%Y-%m-%d'))
         compra = Carrito.objects.filter(id_comprador = usuario_id, realizado = False)
@@ -559,7 +677,8 @@ def mostrarCarrito(request):
         #data = serializers.serialize('json',compra)
             #return render(request,"carrito.html",context)
         context = {
-            'cesta' : compra
+            'cesta' : compra,
+            'estaciones' : estaciones
         }    
         #return HttpResponse(data)
         
@@ -574,10 +693,85 @@ def comprar(request):
     perfil = Perfil.objects.filter(id_usuario = usuario_id).exists()
     if perfil == True:
         compra.update(realizado = True)
-        return redirect("succesfully/comprado")
+        return render(request,"succesfully/comprado.html")
     else:
-        return redirect("usuario/perfil/")
+        return redirect("/usuario/perfil/")
 
 #----------------------------------------FINcarrito
 
 
+#-------------------------------------FAVORITOS
+def addProductoFavoritos(request,id_producto):
+    if request.COOKIES.get('id_usuario') and request.session:
+        id_user = request.COOKIES.get('id_usuario')
+        usuario = Usuarios.objects.get(id = id_user)
+        favoritoList = []
+        favoritos = Favoritos.objects.filter(id_usuario = id_user)
+        for fav in favoritos:
+            favoritoList.append(fav.id_producto.id)          
+        if id_producto in favoritoList:
+            print("ya está añadido")
+            
+        else:
+            productoFavoritoAdded = Producto.objects.filter( id = id_producto)
+            fecha = datetime.today().strftime('%Y-%m-%d')
+            producto = Producto.objects.get(id = id_producto)
+            new_favorito = Favoritos()
+            new_favorito.id_producto = producto
+            
+            new_favorito.id_usuario = usuario
+            new_favorito.fecha = fecha
+            new_favorito.save()
+            context = {
+                'producto' : productoFavoritoAdded
+            }
+            return render(request,"favoritoAdded.html",context)
+        return redirect("/home/")
+    else:
+        return redirect("/login/")
+
+
+
+def eliminarProductoFavoritos(request,producto_id):
+    if request.COOKIES.get('id_usuario'):
+        id_usuario = request.COOKIES.get('id_usuario')
+        favorito = Favoritos.objects.filter(id_usuario = id_usuario, id_producto = producto_id)
+        favorito.delete()
+        return redirect("/mostrarFavoritos/")
+        #return JsonResponse({"status" : "asd"})
+    
+
+def mostrarFavoritos(request):
+    usuario_id = request.COOKIES.get('id_usuario')
+    usuario_existe = Usuarios.objects.filter(id = usuario_id).exists()
+    estaciones = Estacion.objects.all()
+    etiquetas_categoría = Etiqueta.objects.all().exclude(nombre = "Chaqueta").exclude(nombre = "Camiseta").exclude(nombre = "Pantalones").exclude(nombre="Sneakers")
+    etiquetas_prendas = Etiqueta.objects.all().exclude(nombre="Hombre").exclude(nombre="Mujer").exclude(nombre="Niños")
+    
+    if usuario_existe:
+        ids_productos = []
+        productosList = []
+        favoritos = Favoritos.objects.filter(id_usuario = usuario_id)
+        for fav in favoritos:
+            ids_productos.append(fav.id_producto.id)
+        
+        for id_prod in ids_productos:
+            productos = Producto.objects.filter(id = id_prod)
+            for prod in productos:
+                diccionario = {}
+                diccionario['id'] = prod.id
+                diccionario['nombre'] = prod.nombre
+                diccionario['precio'] = prod.precio
+                diccionario['descripcion'] = prod.descripcion
+                productosList.append(diccionario)
+        
+        context = {
+            'productos' : productosList,
+            'estaciones' : estaciones,
+            'etiquetas' : etiquetas_categoría,
+            'prendas' : etiquetas_prendas
+        }
+       
+        #return JsonResponse({"status" : data})
+        
+        return render(request,"mostrarFavoritos.html",context)
