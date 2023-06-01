@@ -34,8 +34,13 @@ urlpatterns = [
     path('usuarios/editarPost/',views.editarUsuarioFormPost),
     path('adminController/eliminar/<int:id_usuario_eliminar>',views.adminDeleteUsuario),
     path('addProduct/<int:id_producto>', views.addProductoCart),
+    path('addFavoritos/<int:id_producto>', views.addProductoFavoritos),
     path('eliminarProducto/<int:producto_id>',views.eliminarProducto),
+    path('eliminarFavoritos/<int:producto_id>', views.eliminarProductoFavoritos),
     path('mostrarCarrito/',views.mostrarCarrito),
-    path('comprar/',views.comprar)
-        
+    path('mostrarFavoritos/',views.mostrarFavoritos),
+    path('comprar/',views.comprar),
+    path('home/estaciones/<estacion_nombre>',views.mostrarProductosEstacion),
+    path('home/etiquetas/<etiqueta_nombre>',views.mostrarProductosEtiquetas),
+    #path('home/prendas/<prenda_nombre>')
 ]
