@@ -79,7 +79,7 @@ class AuthUserUserPermissions(models.Model):
 
 class Carrito(models.Model):
     id_comprador = models.ForeignKey('Usuarios', models.DO_NOTHING, db_column='id_comprador')
-    id_producto = models.ForeignKey('Producto', models.DO_NOTHING, db_column='id_producto')
+    id_producto = models.ForeignKey('Producto',on_delete=models.CASCADE, db_column='id_producto')
     nombre_producto = models.CharField(max_length=250, blank=True, null=True)
     fecha = models.DateField()
     cantidad = models.IntegerField(blank=True, null=True)
@@ -146,7 +146,7 @@ class Estacion(models.Model):
 
 
 class EstacionProducto(models.Model):
-    id_producto = models.ForeignKey('Producto', models.DO_NOTHING, db_column='id_producto')
+    id_producto = models.ForeignKey('Producto', on_delete=models.CASCADE, db_column='id_producto')
     id_estacion = models.ForeignKey(Estacion, models.DO_NOTHING, db_column='id_estacion')
 
     class Meta:
@@ -190,18 +190,21 @@ class Producto(models.Model):
     estado = models.CharField(max_length=50)
     propietario = models.ForeignKey('Usuarios', models.DO_NOTHING, db_column='propietario')
     precio = models.DecimalField(max_digits=10, decimal_places=2)
-    foto = models.CharField(max_length=250)
+    foto = models.ImageField(upload_to='productos')
     talla = models.CharField(max_length=20)
     fecha_subida = models.DateField()
     descripcion = models.CharField(max_length=500, blank=True, null=True)
-
+    
     class Meta:
         managed = False
-        db_table = 'producto'
+        db_table = 'producto'    
+    
+    
+    
 
 
 class ProductoEtiqueta(models.Model):
-    id_producto = models.ForeignKey(Producto, models.DO_NOTHING, db_column='id_producto')
+    id_producto = models.ForeignKey(Producto, on_delete=models.CASCADE, db_column='id_producto')
     id_etiqueta = models.ForeignKey(Etiqueta, models.DO_NOTHING, db_column='id_etiqueta')
 
     class Meta:
