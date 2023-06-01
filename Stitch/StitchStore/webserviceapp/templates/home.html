@@ -2,6 +2,7 @@
 <html lang="en">
 {% load static %}
 {% include "header.html" %}
+{% include "navegador.html" %}
 
 <head>
     <meta charset="UTF-8" />
@@ -39,104 +40,15 @@ const csrftoken = getCookie('csrftoken');
 <body>
 
 
-    <div class="encabezado">
 
-        <nav class="navegacionHome">
-            <a href="/login/">HOMBRE</a>
-            <a href="/login/">MUJER</a>
-            <a href="/login/">NIÑO/a</a>
-            <a href="/login/">SERVICIOS</a>
-            <!-- si esta en register: hay que poner el enlace de login o quitar el siguiente enlace -->
-            <a href="#">ADSASDASD</a>
-
-
-            <!-- <div class="menu"> -->
-                
-            <button class="btn btn-dark dropdown-toggle dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="true">
-                ESTACIONES
-            </button>
-            <ul class="dropdown-menu ">
-                <li><a class="drop" href="#">Primavera</a></li>
-                <li><a class="drop" href="#">Verano</a></li>
-                <li><a class="drop" href="#">Otoño</a></li>
-                <li><a class="drop" href="#">Invierno</a></li>
-            </ul>
-            <!-- <div class="icono-favoritos"> -->
-            <a href="#" class="a-fav"><i class="fa-solid fa-heart favoritos"></i></a>
-
-            <a href="/mostrarCarrito/"><i class="fa-solid fa-cart-shopping cart-icon2"></i></a>
-
-        <!-- VENTANA CARRITO  -->
-        <div class="cart">
-            <h2 class="titulo-carrito-ventana">Carrito</h2>
-            <div class="contenido-cart">
-                
-                
-         
-                <div class="box-cart">
-                    
-                </div>
-                
-
-
-            </div>
-            <!-- TOTAL PRECIO -->
-            <hr class="separar-estructura">
-            <!-- <div class="total-cart">
-                <div class="total-titulo">Total: </div>
-                <div class="total-precio"> 0€</div>
-            </div> -->
-            <!-- BOTON COMPRA -->
-            <!-- <button type="button" class="btn btn-light btn-compra" id="IrCarrito">Ir a Compra</button> -->
-            <!-- CERRAR VENTANA DE CARRITO -->
-            <i class="fa-duotone fa-x" id="cerrar-cart"></i>
-        </div>
-            <!-- </div> -->
-            <!-- <div class="icono-car"> -->
-            
-            <!-- </div> -->
-            <!-- </div> -->
-            
-
-            <button class="btn userButton" type="button" data-bs-toggle="dropdown" >
-                <i class="fa-solid fa-user user"></i>
-            </button>
-            <ul class="dropdown-menu ">
-                <li><a class="drop" href="/usuario/perfil">Perfil</a></li>
-                <li><a class="drop" href="#">Cesta</a></li>
-                <li><a class="drop" href="#">Carrito</a></li>
-                
-                {% if admin.rol %}
-                <li><a class="drop" href="/adminController/">Admin</a></li>
-                {%endif%}
-                <li><a class="drop" href="#">Salir</a></li>
-            </ul>
-
-
-            <!-- <div class="formBuscar"> -->
-            <form class="form-buscar">
-                <input class="buscar" id="buscar" type="search" placeholder="busca una prenda" aria-label="Search">
-                <button class="btn btn-dark" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </form>
-            <!-- </div> -->
-
-
-        </nav>
-    </div>
     <section class="nav-prendas">
         <div class="prendas">
 
             <ul>
                 <div class="prenda-box">
-                    <li><a href="/login/" class="prenda-link nav-active">Chaquetas</a></li>
-
-                    <li><a href="/login/" class="prenda-link nav-active">Camisetas</a></li>
-
-
-                    <li><a href="/login/" class="prenda-link nav-active">Pantalones</a></li>
-
-
-                    <li><a href="/login/" class="prenda-link nav-active">Sneakers</a></li>
+                    {% for prenda in prendas%}
+                    <li><a href="/home/etiquetas/{{prenda.nombre}}" class="prenda-link nav-active">{{prenda.nombre}}</a></li>
+                    {%endfor%}
                 </div>
             </ul>
 
@@ -164,21 +76,12 @@ const csrftoken = getCookie('csrftoken');
                     <input type="hidden" value="{{prod.id}}" id="id-producto" class="id-producto">
                     <!-- <input type="hidden"  name="eliminar"/><a class="btn btn-danger" href="addProduct/{{prod.id}}">Añadir al Carrito</a> -->
                     <a href="/addProduct/{{prod.id}}"><i class="fa-solid fa-cart-shopping add-cart" ></i></a>
+                    <a href="/addFavoritos/{{prod.id}}"><i class="fa-solid fa-heart favoritos" ></i></a>
                     <input type="hidden" name="next" value="{{ request.path }}">
                     
                 </div></form> 
                 {% endfor %} 
             
-            
-            
-                <div class="producto-box">
-                    <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
-                        <h2 class="titulo-producto">Earbuds3</h2>
-                        <span class="precio-producto">23€</span>
-                       
-                        <i class="fa-solid fa-cart-shopping add-cart"></i>
-                    </div>
-
         </div>
 
     </section>
