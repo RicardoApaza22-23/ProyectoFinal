@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load countries %} 
+{% get_countries as countries %}
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="{% static 'css/admin_edit_style.css' %}" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+  {% include "header.html" %}
+
+  <div class="formLogin">
+    <div class="titulo">
+      <legend>Editar Producto <strong>{{producto.nombre}}</strong> por ADMINISTRADOR: {{request.COOKIES.usuario|upper}}</legend>
+    </div>
+    <br>
+    <form action="/productos/editarPost/" method="POST">
+      {% csrf_token %}
+      <input type="hidden" id="id_producto" name="id_producto" value="{{producto.id}}" />
+
+      <div class="input-register">
+        <label for="nombre_producto">Nombre de Producto:</label><br />
+        <i class="fa-solid fa-user"></i>
+        <input type="text" id="nombre_producto" name="nombre_producto" required value="{{producto.nombre}}"/><br />
+
+      </div>
+
+      <div class="input-register">
+        <label for="estado_producto">Estado de Producto:</label><br />
+        <i class="fa-solid fa-user"></i>
+        <select class="form-select" aria-label="Default select example" name="estado_producto" id="estado_producto">
+            <option value="" selected>Elige un estado</option>
+            <option value="nuevo">Nuevo</option>
+            <option value="Segunda mano">Segunda mano</option>
+        </select>
+      </div>
+
+      <div class="input-register">
+        <label for="propietario_producto">Propietario de Producto:</label><br />
+        <i class="fa-solid fa-user"></i>
+        <select class="form-select" aria-label="Default select example" name="propietario_producto" id="propietario_producto">
+            <option value="" selected>Elige un propietario</option>
+            {%for user in usuarios%}
+            <option value="{{user.id}}">{{user.nombre}}</option>
+
+            {%endfor%}
+            
+        </select>
+      </div>
+
+      <div class="input-register">
+        <label for="precio_producto">Precio de Producto:</label><br />
+        <i class="fa-solid fa-user"></i>
+       <input type="number" class="form-select" style="background-color: white;" placeholder="precio €" aria-label="Default select example" id="precio_producto" name="precio_producto" />
+      </div>
+
+      <div class="input-register">
+        <label for="precio_producto">Foto de Producto:</label><br />
+        <i class="fa-solid fa-user"></i>
+       <input type="file"  class="form-select"  id="foto_producto" name="foto_producto" />
+      </div>
+
+      <div class="input-register">
+        <label for="talla_producto">Foto de Producto:</label><br />
+        <i class="fa-solid fa-user"></i>
+        <select class="form-select" aria-label="Default select example" name="propietario_producto" id="propietario_producto">
+            <option value="" selected>Elige una talla</option>
+
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>            
+        </select>
+      </div>
+
+      <div class="input-register">
+        <label for="fecha_producto">Fecha de subida de Producto:</label><br />
+        <i class="fa-solid fa-calendar-days"></i>
+        <input
+          type="date"
+          id="fecha_producto"
+          required
+          name="fecha_producto"
+          
+        />
+      </div>
+
+      <div class="input-register">
+        <label for="descripcion_producto">Descripcion de Producto:</label><br />
+        <i class="fa-solid fa-user"></i>
+       <!-- <input type="text" class="form-select" style="background-color: white;" id="foto_producto" name="foto_producto"/> -->
+       <textarea name="descripcion_producto" id="descripcion_producto" cols="47.5" rows="2"></textarea>
+      </div>
+
+
+      <br />
+      <input type="submit" id="submit" class="btn-enviar" value="Confirmar Cambios" /><br />
+      <br />
+    </form>
+    
+    <script src="{% static 'js/register.js' %}"></script>
+</body>
+
+</html>
