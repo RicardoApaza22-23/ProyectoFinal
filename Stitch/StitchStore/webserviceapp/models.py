@@ -137,6 +137,41 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
+class Estacion(models.Model):
+    nombre = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'estacion'
+
+
+class EstacionProducto(models.Model):
+    id_producto = models.ForeignKey('Producto', models.DO_NOTHING, db_column='id_producto')
+    id_estacion = models.ForeignKey(Estacion, models.DO_NOTHING, db_column='id_estacion')
+
+    class Meta:
+        managed = False
+        db_table = 'estacion_producto'
+
+
+class Etiqueta(models.Model):
+    nombre = models.CharField(max_length=200)
+
+    class Meta:
+        managed = False
+        db_table = 'etiqueta'
+
+
+class Favoritos(models.Model):
+    id_producto = models.ForeignKey('Producto', models.DO_NOTHING, db_column='id_producto')
+    id_usuario = models.ForeignKey('Usuarios', models.DO_NOTHING, db_column='id_usuario')
+    fecha = models.DateField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'favoritos'
+
+
 class Perfil(models.Model):
     id_usuario = models.ForeignKey('Usuarios', models.DO_NOTHING, db_column='id_usuario')
     telefono = models.CharField(max_length=20)
@@ -163,6 +198,15 @@ class Producto(models.Model):
     class Meta:
         managed = False
         db_table = 'producto'
+
+
+class ProductoEtiqueta(models.Model):
+    id_producto = models.ForeignKey(Producto, models.DO_NOTHING, db_column='id_producto')
+    id_etiqueta = models.ForeignKey(Etiqueta, models.DO_NOTHING, db_column='id_etiqueta')
+
+    class Meta:
+        managed = False
+        db_table = 'producto_etiqueta'
 
 
 class Usuarios(models.Model):
