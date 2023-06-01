@@ -1,0 +1,38 @@
+{% include "header.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAVORITOS</title>
+    <link rel="stylesheet" href="{% static 'css/login_style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/error_style.scss' %}" />
+</head>
+<body>
+
+    <div class="error">
+          <div class="box__description-container">
+
+            <div><h4 style="color:green">PRODUCTO AÑADIDO CORRECTAMENTE A FAVORITOS</h4></div>
+          </div>
+          <br/>
+          <div class="sadStitch">
+            {% for prod in producto %}
+                  
+            <div class="producto-box">
+                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
+                    <h2 class="titulo-producto">{{prod.nombre}}</h2>
+                    <span class="precio-producto">{{prod.precio}}€</span>
+                    <!-- <input type="hidden"  name="eliminar"/><a class="btn btn-danger" href="addProduct/{{prod.id}}">Añadir al Carrito</a> -->
+                </div>
+                {% endfor %} 
+           </div>
+<br/>
+          <button class="btn-goback" onclick="history.back()">Volver</button>
+  
+      </div>
+   
+</body>
+</html>
