@@ -4,14 +4,14 @@ let carrito = document.querySelector(".cart")
 let cerrarCarrito = document.querySelector("#cerrar-cart")
 const carrito_icon = document.querySelector('#cart-icon')
 let cesta = []
-//abrir ventana carrito
-carritoIcon.onclick = () =>{
-    carrito.classList.add("active");
-};
-//cerra ventana carrito
-cerrarCarrito.onclick = () =>{
-    carrito.classList.remove("active");
-};
+// //abrir ventana carrito
+// carritoIcon.onclick = () =>{
+//     carrito.classList.add("active");
+// };
+// //cerra ventana carrito
+// cerrarCarrito.onclick = () =>{
+//     carrito.classList.remove("active");
+// };
 
 //guardar la cesta en el navegador
 document.addEventListener('DOMContentLoaded', () => {
