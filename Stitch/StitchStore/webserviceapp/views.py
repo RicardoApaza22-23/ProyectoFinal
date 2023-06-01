@@ -469,12 +469,7 @@ def perfilFormPost(request):
 #-----------------------------------------------------ADMIN--------------
 
 #falta: mostrar operaciones sobre todas las tablas : user,producto,etiqueta,estacion
-def administradorOperaciones(request):
-    usuarios = Usuarios.objects.all()
-    context = {
-        'usuarios' : usuarios
-    }
-    return render(request,"adminController.html",context)
+
 
 #un apartado temmplate para las operaciones del administrador con todo el contenido y podeeres
 def administradorOperaciones(request):
@@ -494,33 +489,38 @@ def administradorOperaciones(request):
             admin = Usuarios.objects.get(id = usuario_logeado.id)
             context['admin'] = admin
         if((usuario_logeado.rol == 1)):
-            return render(request,"adminController.html",context)
+            return render(request,"admin/adminController.html",context)
         else:
             
             return render(request, "errors/errorAdmin.html")
 
     else:
         return JsonResponse({"status":"no hay usuario"})
-    
 
 #método para editar los datos de los usuarios
 #enviamos la información del usuario en cuestión a un formulario dónde podremos editarlo
 def adminEditarUsuario(request,id_usuario_editar):
     usuario = Usuarios.objects.get(pk=id_usuario_editar)
     perfil_existe = Perfil.objects.filter(id_usuario = id_usuario_editar).exists()
- 
-    if(perfil_existe):
-        perfil = Perfil.objects.get(id_usuario = id_usuario_editar)
-        context = {
-        'usuario' : usuario,      
-        'perfil' : perfil
-    }
+    if request.COOKIES.get('id_usuario'):
+        usuario_logeado = request.COOKIES.get('id_usuario')
+        if es_admin(request,usuario_logeado):
+            if(perfil_existe):
+                perfil = Perfil.objects.get(id_usuario = id_usuario_editar)
+                context = {
+                'usuario' : usuario,      
+                'perfil' : perfil
+            }
+            else:
+                context = {
+                'usuario' : usuario
+                }
+            
+            return render(request,"admin/editarUsuario.html",context)
+        else:
+            return redirect("/home/")
     else:
-        context = {
-        'usuario' : usuario
-        }
-    
-    return render(request,"admin/editarUsuario.html",context)
+        return redirect("/login/")
 
 
     
@@ -540,12 +540,13 @@ def editarUsuarioFormPost(request):
     else:
         perfil_usuario = Perfil()
         perfil_usuario.id_usuario = usuario_bd
+        #falta: averiguar porqué fallas
         perfil_usuario.fecha_nacimiento = request_form["fecha_nacimiento"]
     
     if( usuario_bd.nombre != usuario_request and nickname_existe_en_bd(request,usuario_request) == False and usuario_request!=''):
         usuario_bd.nombre = usuario_request
         usuario_bd.save()
-    #error: rol no functiona
+
     rol_request = request_form['rol']
     if(rol_request != usuario_bd.rol):
         usuario_bd.rol = rol_request
@@ -562,35 +563,62 @@ def editarUsuarioFormPost(request):
             if (compara_datos(password_request,password_repeat_request) == True):
                 password_hasheada = make_password(password_request)
                 usuario_bd.password = password_hasheada
-                usuario_bd.save() 
-                
+                usuario_bd.save()
+            else:
+                return render(request, "errors/errorPass.html")
+        else:
+            return render(request, "errors/errorPass.html")
+    else:
+        return render(request, "errors/errorPass.html")           
+            
                 
                 
     telefono_request = request_form["telefono"]
     if(telefono_request != perfil_usuario.telefono and telefono_request != "" and validar_telefono(request,telefono_request) == True and telefono_existe_en_bd(request,telefono_request) == False):
         perfil_usuario.telefono = telefono_request
         perfil_usuario.save()
+    else:
+        return render(request, "errors/errorTelefono.html")
+        
     dni_request = request_form["DNI"]
     if(dni_request != perfil_usuario.dni and dni_request != ""):
         if(validar_dni(request,dni_request) == True and dni_existe_en_bd(request,dni_request) == False):
             perfil_usuario.dni = dni_request
             perfil_usuario.save()
+        else:
+            return render(request, "errors/errorDNI.html")
+    else:
+        return render(request, "errors/errorDNI.html")
+    
     direccion_request = request_form["direccion"]
     if(direccion_request != perfil_usuario.direccion and direccion_request != ""):
         perfil_usuario.direccion = direccion_request
         perfil_usuario.save()
+    else:
+        return render(request, "errors/errorDireccion.html")
+    
     fecha_nacimiento_request = request_form["fecha_nacimiento"]
     if(fecha_nacimiento_request != "" and fecha_nacimiento_request != perfil_usuario.fecha_nacimiento):
         if(comparar_fechas(fecha_nacimiento_request) == True):
             perfil_usuario.fecha_nacimiento = fecha_nacimiento_request
             perfil_usuario.save()
+        else:
+            return render(request, "errors/errorFecha.html")
             
     pais_request = request_form["pais"]
+    
     if(pais_request != "" and pais_request != perfil_usuario.pais):
         perfil_usuario.pais = pais_request
         perfil_usuario.save()
+    else:
+        return render(request, "errors/errorRegion.html")
 
-    return JsonResponse({"usuario": rol_request})   
+    if perfil_usuario:
+        context = {
+            'usuarioEditado' : usuario_bd.nombre
+        }
+        return render(request,"succesfully/usuarioEditado.html",context)
+
 
 #controlador para eliminar el usuario que se pasa por url
 def adminDeleteUsuario(request, id_usuario_eliminar):
@@ -599,41 +627,93 @@ def adminDeleteUsuario(request, id_usuario_eliminar):
     return administradorOperaciones(request)
 
 
+#vista para la administración de productos
+def administracionProductos(request):
+    if request.COOKIES.get('id_usuario'):
+        user_id = request.COOKIES.get('id_usuario')
+        if es_admin(request,user_id):
+            productos = Producto.objects.all()
+            
+            context = {
+                'productos' : productos
+            }
+            # usuarios = []
+            # for prod in productos:
+            #     usuarios = Usuarios.objects.filter(id = prod.propietario.id)
+            #     for user in usuarios:
+            #         print(user.nombre)
+            #         productos.propietario = user.nombre
+                
+            return render(request,"admin/productos.html", context)
+        else:
+            return redirect("/login/")
+    else:
+        return redirect("/login/")
     
+#método para eliminar el producto solicitado
+def adminEliminarProducto(request,id_producto_eliminar):
+    producto = Producto.objects.get(pk = id_producto_eliminar)
+    producto.delete()
+    return administracionProductos(request)
+
+
+
+def adminEditarProducto(request,id_producto_editar):
+    producto = Producto.objects.get(pk = id_producto_editar)
+    if request.COOKIES.get('id_usuario'):
+        usuario_id = request.COOKIES.get('id_usuario')
+        usuarios = Usuarios.objects.all()
+        if es_admin(request,usuario_id):
+            context = {
+                'producto' : producto,
+                'usuarios' : usuarios
+            }
+            #return JsonResponse({"status" : id_producto_editar})
+            return render(request,"admin/editarProducto.html",context)
     
+
+def editarProductoFormPost(request):
+    requestForm = request.POST.dict()
+    print(requestForm['nombre_producto'])
+    id_usuario_form = requestForm['id_producto']
+    foto_form = requestForm['foto_producto']
+    producto = Producto.objects.filter(pk = id_usuario_form)
+    producto.update(foto = foto_form)
+    return HttpResponse(requestForm['foto_producto'])
 #---------------------------------------------------FINADMIN
 
 # ---------------------productos-------------------------#
 
 
+
+
+
 #----------------------carrito------------------------#
 
+#método para añadir un producto al carrito
 def addProductoCart(request,id_producto):
-    #request.session['cesta'] = []
-    # if not request.session['cesta']:
-   
-    
+    #recogemos la información de la sesión para guardar la cesta y el usuario
     if (request.COOKIES.get('id_usuario') and request.session):
         fecha = datetime.today().strftime('%Y-%m-%d')
         id_user = request.COOKIES.get('id_usuario') 
         usuario = Usuarios.objects.get(pk = id_user)
         carrito = request.session['cesta']
         id_carrito = request.session['id_cesta']
-        #del request.session['cesta']
-        #producto = Producto.objects.get(pk = id_producto)
+        
         producto_favorito_list = []
         cesta = Carrito.objects.filter(id_comprador = id_user, realizado = False)
         for prod in cesta:
             producto_favorito_list.append(prod.id_producto)
             
-        
+        #en caso de que el producto ya existe en la cesta, no se creará otro carrito
+        #el usuario podrá añadir los favorito al carrito siempre y cuando no se encuentre ya en el carrito
         if id_producto in carrito and id_producto not in producto_favorito_list:
             print("ya está añadido")
         else:
             carrito.append(id_producto)
             request.session.modified = True
             productoAdded = Producto.objects.filter(id=id_producto)
-            
+            #guardmaos el carrito
             for id_producto in carrito:
                 compra = Carrito()
                 
@@ -657,36 +737,33 @@ def addProductoCart(request,id_producto):
     return redirect("/login/")    
 
 
+#método para eliminar el producto del carrito
 def eliminarProducto(request,producto_id):
-    usuario = request.COOKIES.get('id_usuario')
-    cesta = request.session['cesta']
-    cesta_id = request.session['id_cesta']
-    carrito = Carrito.objects.get(id_producto = producto_id ,realizado = False)
+    user_id = request.COOKIES.get('id_usuario')
+    usuario = Usuarios.objects.get(id = user_id)
+    
+    carrito = Carrito.objects.get(id_producto = producto_id ,realizado = False, id_comprador = usuario)
     carrito.delete()
-    return redirect("/mostrarCarrito/")
-    #return JsonResponse({"Status" : producto_id})   
+    return redirect("/mostrarCarrito/")   
     
-    
+#vista para mostrar la información del carrito en un template
 def mostrarCarrito(request):
+    #si el usuario está logeado, se guardará toda la información para enviársela al template de carrito.html
+    #de lo contrario, se redirige al login
     if(request.COOKIES.get('id_usuario') and request.session):
         estaciones = Estacion.objects.all()
         usuario_id = request.COOKIES.get('id_usuario') 
-        #fecha_actual =(datetime.today().strftime('%Y-%m-%d'))
         compra = Carrito.objects.filter(id_comprador = usuario_id, realizado = False)
-        
-        #data = serializers.serialize('json',compra)
-            #return render(request,"carrito.html",context)
         context = {
             'cesta' : compra,
             'estaciones' : estaciones
         }    
-        #return HttpResponse(data)
-        
-        
-
         return render(request,"carrito.html",context)
     return redirect("/login/")
 
+#método para realizar la compra
+#si el usuario tiene el perfil completado, se realizará la compra
+#de lo contrario, deberá completarlo antes de comprar
 def comprar(request):
     usuario_id = request.COOKIES.get('id_usuario')
     compra = Carrito.objects.filter(id_comprador = usuario_id, realizado = False)
@@ -701,8 +778,11 @@ def comprar(request):
 
 
 #-------------------------------------FAVORITOS
+#método que añade los productos a favorito
 def addProductoFavoritos(request,id_producto):
+    #solo se podrá guardar en favoritos si el usuario está logeado
     if request.COOKIES.get('id_usuario') and request.session:
+        #guardamso la información del producto y del usuario y creamos un nuevo registro en la tabla favoritos
         id_user = request.COOKIES.get('id_usuario')
         usuario = Usuarios.objects.get(id = id_user)
         favoritoList = []
@@ -725,29 +805,30 @@ def addProductoFavoritos(request,id_producto):
             context = {
                 'producto' : productoFavoritoAdded
             }
+            
             return render(request,"favoritoAdded.html",context)
         return redirect("/home/")
     else:
         return redirect("/login/")
 
 
-
+#método para eliminar un producto de favoritos
 def eliminarProductoFavoritos(request,producto_id):
     if request.COOKIES.get('id_usuario'):
         id_usuario = request.COOKIES.get('id_usuario')
         favorito = Favoritos.objects.filter(id_usuario = id_usuario, id_producto = producto_id)
         favorito.delete()
-        return redirect("/mostrarFavoritos/")
-        #return JsonResponse({"status" : "asd"})
-    
+        return redirect("/mostrarFavoritos/")    
 
+#vista para mostrar los productos marcados como favoritos
 def mostrarFavoritos(request):
+    #guardamos toda la información para el template
     usuario_id = request.COOKIES.get('id_usuario')
     usuario_existe = Usuarios.objects.filter(id = usuario_id).exists()
     estaciones = Estacion.objects.all()
     etiquetas_categoría = Etiqueta.objects.all().exclude(nombre = "Chaqueta").exclude(nombre = "Camiseta").exclude(nombre = "Pantalones").exclude(nombre="Sneakers")
     etiquetas_prendas = Etiqueta.objects.all().exclude(nombre="Hombre").exclude(nombre="Mujer").exclude(nombre="Niños")
-    
+    #si el usuario existe se mostrá toda la información de los favoritos
     if usuario_existe:
         ids_productos = []
         productosList = []
@@ -771,7 +852,5 @@ def mostrarFavoritos(request):
             'etiquetas' : etiquetas_categoría,
             'prendas' : etiquetas_prendas
         }
-       
-        #return JsonResponse({"status" : data})
         
         return render(request,"mostrarFavoritos.html",context)
