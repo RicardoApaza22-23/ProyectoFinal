@@ -1,0 +1,31 @@
+{% include "header.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTRADO</title>
+    <link rel="stylesheet" href="{% static 'css/login_style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/error_style.scss' %}" />
+</head>
+<body>
+
+    <div class="error">
+          <div class="box__description-container">
+            <div><h2><strong class="success">Usuario {{usuarioEditado}} editado con éxito!</strong></h2></div>
+            <div>Los datos de {{usuarioEditado}} han sido editados con éxito en Stitch's Store.</div>
+          </div>
+          <br/>
+          <div class="happyStitch">
+            <img src="{% static 'img/alohaStitch.gif' %}" width="220px" height="190px"  alt="sadStitch">
+          </div>
+<br/>
+{% comment %} cambiar link {% endcomment %}
+          <button class="btn-goback" onclick="history.back()">Volver</button>
+  
+      </div>
+   
+</body>
+</html>
