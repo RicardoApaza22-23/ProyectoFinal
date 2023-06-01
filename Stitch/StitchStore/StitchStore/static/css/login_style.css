@@ -262,4 +262,8 @@ strong{
 }
 .btn-goback-link{
     text-decoration: none;
+    color:white
+}
+.btn-goback:hover{
+    text-decoration: none;
 }
