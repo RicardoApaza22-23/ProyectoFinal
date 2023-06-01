@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from webserviceapp import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -31,8 +33,11 @@ urlpatterns = [
     path('usuario/perfil/', views.perfilFormPost),
     path('adminController/',views.administradorOperaciones),
     path('adminController/editar/<int:id_usuario_editar>/', views.adminEditarUsuario),
+    path('adminController/editarProducto/<int:id_producto_editar>', views.adminEditarProducto),
     path('usuarios/editarPost/',views.editarUsuarioFormPost),
     path('adminController/eliminar/<int:id_usuario_eliminar>',views.adminDeleteUsuario),
+    path('adminController/eliminarProducto/<int:id_producto_eliminar>',views.adminEliminarProducto),
+    path('productos/editarPost/',views.editarProductoFormPost),
     path('addProduct/<int:id_producto>', views.addProductoCart),
     path('addFavoritos/<int:id_producto>', views.addProductoFavoritos),
     path('eliminarProducto/<int:producto_id>',views.eliminarProducto),
@@ -42,5 +47,7 @@ urlpatterns = [
     path('comprar/',views.comprar),
     path('home/estaciones/<estacion_nombre>',views.mostrarProductosEstacion),
     path('home/etiquetas/<etiqueta_nombre>',views.mostrarProductosEtiquetas),
+    path('adminController/administracionProductos',views.administracionProductos),
+    
     #path('home/prendas/<prenda_nombre>')
-]
+] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
