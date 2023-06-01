@@ -504,6 +504,7 @@ background-color: transparent;
     cursor: pointer;
 }
 
+/* icono añadir producto al carrito */
 
 .add-cart{
 
@@ -521,8 +522,22 @@ background-color: transparent;
     background-color: white;
 }
 
+/* icono añadir producto a favoritos */
 
+.producto-box .favoritos{
+    color: white;
+    background-color: black;
+    position: absolute;
+    padding: 10px;
+    bottom: 0;
+    margin-left: 6rem;
+    cursor: pointer;
+}
 
+.favoritos:hover{
+    color: red;
+    background-color: white;
+}
 
 
 
