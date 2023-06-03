@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USUARIO EDITADO</title>
+    <title>PRODUCTO EDITADO</title>
     <link rel="stylesheet" href="{% static 'css/login_style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/error_style.scss' %}" />
 </head>
@@ -14,16 +14,18 @@
 
     <div class="error">
           <div class="box__description-container">
-            <div><h2><strong class="success">Usuario {{usuarioEditado}} editado con éxito!</strong></h2></div>
-            <div>Los datos de {{usuarioEditado}} han sido editados con éxito en Stitch's Store.</div>
+            
+            <div><h2><strong class="success">Producto {{producto}} editado con éxito!</strong></h2></div>
+            <div>Los datos de {{producto}} han sido editados con éxito en Stitch's Store.</div>
           </div>
+
           <br/>
           <div class="happyStitch">
             <img src="{% static 'img/alohaStitch.gif' %}" width="220px" height="190px"  alt="sadStitch">
           </div>
 <br/>
 
-          <button class="btn-goback" href="/adminController/" >Volver</button>
+          <a href="/adminController/administracionProductos"><button class="btn-goback" >Volver</button></a>
   
       </div>
    
