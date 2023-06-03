@@ -14,7 +14,7 @@ from datetime import datetime
 from django.contrib import messages
 from random import randrange
 from django.core import serializers
-
+from django.core.files.storage import FileSystemStorage
 # -------------------------------------------------------USUARIOS---------------------------------------------------#
 
 # --------------------------------LOGIN Y LOGOUT
@@ -45,8 +45,8 @@ def loginPOST(request):
         usuario = Usuarios.objects.get(nombre=nickname)
         password = requestForm.get('password')
         # si el nombre está bien, comparamos la contraseá con la contraseña hasheada de ese usuario guardada en la BD
-        #if check_password(password, usuario.password):
-        if(password == usuario.password):
+        if check_password(password, usuario.password):
+        #if(password == usuario.password):
             id_carrito = usuario.nombre +"_"+ str(randrange(1000))
             # redirigmos al homepage Y guardamos el nombre del usuario en una cookie
             homepage = redirect('/home/')
@@ -69,8 +69,9 @@ def LogOut(request):
     logout = redirect('/login/')
     logout.delete_cookie('usuario')
     logout.delete_cookie('id_usuario')
-    if request.session['cesta']:del request.session['cesta']
-    if request.session['id_cesta']:del request.session['id_cesta']
+    #if request.session:
+        #del request.session['cesta']
+        #del request.session['id_cesta']
     return logout
 
 
@@ -222,6 +223,7 @@ def goHome(request):
                 "prendas" : etiquetas_prendas
             }
             return render(request, "home.html", context)
+        return render(request,"home.html",context)
     else:
         return render(request,"home.html",context)
 
@@ -295,6 +297,7 @@ def mostrarProductosEtiquetas(request, etiqueta_nombre):
                 diccionario = {}
                 diccionario['id'] = prod.id
                 diccionario['nombre'] = prod.nombre
+                diccionario['foto'] = prod.foto
                 diccionario['precio'] = prod.precio
                 diccionario['descripcion'] = prod.descripcion
                 productoList.append(diccionario)
@@ -380,6 +383,10 @@ def registerPOST(request):
                                 request, "succesfully/registerDone.html", datosUser)
                                 goRegisterDoneSuccesfully.set_cookie('usuario', nickname)
                                 goRegisterDoneSuccesfully.set_cookie('id_usuario', newUser.id)
+                                id_carrito = newUser.nombre +"_"+ str(randrange(1000))
+                                request.session['cesta'] = []
+                                request.session['id_cesta'] = id_carrito
+                                
                                 
                                 # return JsonResponse({"status":"usuario registrad"})
                                 # return render(request, "succesfully/registerDone.html", datosUser)
@@ -637,12 +644,6 @@ def administracionProductos(request):
             context = {
                 'productos' : productos
             }
-            # usuarios = []
-            # for prod in productos:
-            #     usuarios = Usuarios.objects.filter(id = prod.propietario.id)
-            #     for user in usuarios:
-            #         print(user.nombre)
-            #         productos.propietario = user.nombre
                 
             return render(request,"admin/productos.html", context)
         else:
@@ -657,32 +658,140 @@ def adminEliminarProducto(request,id_producto_eliminar):
     return administracionProductos(request)
 
 
-
+#métodod para editar el producto solicitado
 def adminEditarProducto(request,id_producto_editar):
     producto = Producto.objects.get(pk = id_producto_editar)
     if request.COOKIES.get('id_usuario'):
+        #si el uusuario es administrador, accederá al formulario de edición
         usuario_id = request.COOKIES.get('id_usuario')
         usuarios = Usuarios.objects.all()
+        etiquetas = Etiqueta.objects.all().exclude(nombre = 'Hombre').exclude(nombre='Mujer').exclude(nombre='Niños')
+        persona = Etiqueta.objects.all().exclude(nombre = 'Chaqueta').exclude(nombre = 'Pantalones').exclude(nombre = 'Camiseta').exclude(nombre='Sneakers')
         if es_admin(request,usuario_id):
             context = {
                 'producto' : producto,
-                'usuarios' : usuarios
+                'usuarios' : usuarios,
+                'etiquetas' : etiquetas,
+                'persona' : persona
             }
-            #return JsonResponse({"status" : id_producto_editar})
+            
             return render(request,"admin/editarProducto.html",context)
     
-
+#método que realiza los cambios en el producto
 def editarProductoFormPost(request):
     requestForm = request.POST.dict()
-    print(requestForm['nombre_producto'])
-    id_usuario_form = requestForm['id_producto']
-    foto_form = requestForm['foto_producto']
-    producto = Producto.objects.filter(pk = id_usuario_form)
-    producto.update(foto = foto_form)
-    return HttpResponse(requestForm['foto_producto'])
+    #foto_form = requestForm['foto_producto']
+    #se deberá rellenar todos los campos
+    if requestForm['nombre_producto'] !='' and requestForm['estado_producto'] !='' and requestForm['propietario_producto'] !=''  and requestForm['talla_producto'] !='' and requestForm['fecha_producto'] != '' and requestForm['descripcion_producto'] !='' and requestForm['etiqueta_producto']!='':
+        id_producto_form = requestForm['id_producto']
+        foto_form = request.FILES['foto_producto']
+        producto = Producto.objects.filter(pk = id_producto_form)
+        producto.update(nombre = requestForm['nombre_producto'])
+        producto.update(estado = requestForm['estado_producto'])
+        usuario = Usuarios.objects.get(id = requestForm['propietario_producto'])
+        producto.update(propietario = usuario.id)
+        producto.update(precio = requestForm['precio_producto'])
+        fs = FileSystemStorage()
+        fs.save(foto_form,foto_form)
+        producto.update(foto = foto_form)
+        producto.update(talla = requestForm['talla_producto'])
+        producto.update(fecha_subida = requestForm['fecha_producto'])
+        producto.update(descripcion = requestForm['descripcion_producto'])
+        
+        producto_foreign = Producto.objects.get(id = id_producto_form)
+        etiqueta_foreign = Etiqueta.objects.get(id = requestForm['etiqueta_producto'])
+        persona_foreign = Etiqueta.objects.get(id = requestForm['persona_producto'])
+        producto_etiqueta = ProductoEtiqueta.objects.filter(id_producto = producto_foreign)
+        producto_etiqueta.delete()
+        new_producto_etiqueta = ProductoEtiqueta()
+        new_producto_etiqueta.id_producto = producto_foreign
+        new_producto_etiqueta.id_etiqueta = etiqueta_foreign
+        new_producto_etiqueta.save()
+        new_producto_persona = ProductoEtiqueta()
+        new_producto_persona.id_producto = producto_foreign
+        new_producto_persona.id_etiqueta = persona_foreign
+        new_producto_persona.save()
+        
+
+        
+        context = {
+            'producto' : producto_foreign.nombre
+        }
+        return render(request,"succesfully/productoEditado.html",context)
+        
+        
+    else:
+        return render(request,"errors/errorProducto.html")
+    
+#vista para el formulario de crear producto
+def adminRegistrarProducto(request):
+    if request.COOKIES.get('id_usuario'):
+        #si el uusuario es administrador, accederá al formulario de creación
+        usuario_id = request.COOKIES.get('id_usuario')
+        usuarios = Usuarios.objects.all()
+        etiquetas = Etiqueta.objects.all().exclude(nombre = 'Hombre').exclude(nombre='Mujer').exclude(nombre='Niños')
+        persona = Etiqueta.objects.all().exclude(nombre = 'Chaqueta').exclude(nombre = 'Pantalones').exclude(nombre = 'Camiseta').exclude(nombre='Sneakers')
+        if es_admin(request,usuario_id):
+            context = {
+                'usuarios' : usuarios,
+                'etiquetas' : etiquetas,
+                'persona' : persona
+            }
+    return render(request,"admin/crearProducto.html",context)
+
+#método para validar los datos y crear el producto
+def adminRegisterProductoPOST(request):
+    requestForm = request.POST.dict()
+    #foto_form = requestForm['foto_producto']
+    #se deberá rellenar todos los campos
+    if requestForm['nombre_producto'] !='' and requestForm['estado_producto'] !='' and requestForm['propietario_producto'] !=''  and requestForm['talla_producto'] !='' and requestForm['fecha_producto'] != '' and requestForm['descripcion_producto'] !='' and requestForm['etiqueta_producto']!='':
+        new_producto = Producto()
+        new_producto.nombre = requestForm['nombre_producto']
+        new_producto.estado = requestForm['estado_producto']
+        new_producto.precio = requestForm['precio_producto']
+        foto_form = request.FILES['foto_producto']
+        fs = FileSystemStorage()
+        fs.save(foto_form,foto_form)
+        new_producto.foto = foto_form
+        usuario = Usuarios.objects.get(pk = requestForm['propietario_producto'])
+        new_producto.propietario = usuario
+        new_producto.talla = requestForm['talla_producto']
+        new_producto.fecha_subida = requestForm['fecha_producto']
+        new_producto.descripcion = requestForm['descripcion_producto']
+        new_producto.save()
+        etiquetas = Etiqueta.objects.get(pk = requestForm['etiqueta_producto'])
+        etiqueta_producto = ProductoEtiqueta()
+        etiqueta_producto.id_etiqueta = etiquetas
+        etiqueta_producto.id_producto = new_producto
+        etiqueta_producto.save()
+        
+        return administracionProductos(request)
+
+
+#vista que muestra las etiquetas y operaciones
+def administracionEtiquetas(request):
+    etiquetas = Etiqueta.objects.all()
+    context = {
+        'etiquetas' : etiquetas
+    }
+    return render(request,"admin/etiquetas.html",context)
+
+#con este método se eliminará la etiqueta que se solicita
+def adminEliminarEtiqueta(request,id_etiqueta):
+    etiqueta = Etiqueta.objects.get(id = id_etiqueta)
+    etiqueta.delete()
+    return administracionEtiquetas(request)
+
+#método que enviará al formulario de crear usuario
+def adminRegistrarUsuario(request):
+    return render(request,"admin/crearUsuario.html")
+
+
+
+
 #---------------------------------------------------FINADMIN
 
-# ---------------------productos-------------------------#
+
 
 
 
@@ -754,10 +863,14 @@ def mostrarCarrito(request):
         estaciones = Estacion.objects.all()
         usuario_id = request.COOKIES.get('id_usuario') 
         compra = Carrito.objects.filter(id_comprador = usuario_id, realizado = False)
+        #producto = Producto.objects.filter(id = compra.id_producto)
         context = {
             'cesta' : compra,
             'estaciones' : estaciones
         }    
+        if es_admin(request,usuario_id) == True:
+            admin = Usuarios.objects.get(id = usuario_id)
+            context['admin'] = admin
         return render(request,"carrito.html",context)
     return redirect("/login/")
 
@@ -844,13 +957,17 @@ def mostrarFavoritos(request):
                 diccionario['nombre'] = prod.nombre
                 diccionario['precio'] = prod.precio
                 diccionario['descripcion'] = prod.descripcion
+                diccionario['foto'] = prod.foto
                 productosList.append(diccionario)
-        
+    
         context = {
             'productos' : productosList,
             'estaciones' : estaciones,
             'etiquetas' : etiquetas_categoría,
             'prendas' : etiquetas_prendas
         }
+        if es_admin(request,usuario_id):
+            admin = Usuarios.objects.get(pk = usuario_id)
+            context['admin'] = admin
         
         return render(request,"mostrarFavoritos.html",context)
