@@ -10,6 +10,7 @@ Stitch's store es un proyecto sobre una tienda online.
 - [Instalación](#instalación)
 - [Uso](#uso)
 - [Contribución](#contribución)
+- [Branch](#ramas)
 - [Licencia](#licencia)
 - [Contacto](#contacto)
 
@@ -73,6 +74,8 @@ Sobre estos elementos el administrador tiene poderes de edición, eliminar y cre
    #### Subir los cambios
    git push origin mi-contribución
    
+## Branch
+Esta rama tiene como fin mostrar el proyecto en producción
 ## Licencia
 
 Este proyecto se encuentra bajo la Licencia MIT.
