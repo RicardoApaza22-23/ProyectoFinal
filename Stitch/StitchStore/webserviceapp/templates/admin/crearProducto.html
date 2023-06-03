@@ -17,17 +17,17 @@
 
   <div class="formLogin">
     <div class="titulo">
-      <legend>Editar Producto <strong>{{producto.nombre}}</strong> por ADMINISTRADOR: {{request.COOKIES.usuario|upper}}</legend>
+      <legend>Crear Producto <strong>{{producto.nombre}}</strong> por ADMINISTRADOR: {{request.COOKIES.usuario|upper}}</legend>
     </div>
     <br>
-    <form action="/productos/editarPost/" method="POST" enctype="multipart/form-data">
+    <form action="/adminController/registrarProducto/crearProductoPOST/" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
-      <input type="hidden" id="id_producto" name="id_producto" value="{{producto.id}}" />
+
 
       <div class="input-register">
         <label for="nombre_producto">Nombre de Producto:</label><br />
         <i class="fa-solid fa-user"></i>
-        <input type="text" id="nombre_producto" name="nombre_producto" required value="{{producto.nombre}}"/><br />
+        <input type="text" id="nombre_producto" name="nombre_producto" required /><br />
 
       </div>
 
@@ -80,7 +80,7 @@
       <div class="input-register">
         <label for="precio_producto">Precio de Producto:</label><br />
         <i class="fa-solid fa-user"></i>
-       <input type="number" min="0.00"  step="0.01" required class="form-select" value="{{producto.precio}}" style="background-color: white;" placeholder="precio €" aria-label="Default select example" id="precio_producto" name="precio_producto" />
+       <input type="number" min="0.00"  step="0.01" required class="form-select" style="background-color: white;" placeholder="precio €" aria-label="Default select example" id="precio_producto" name="precio_producto" />
       </div>
 
       <div class="input-register">

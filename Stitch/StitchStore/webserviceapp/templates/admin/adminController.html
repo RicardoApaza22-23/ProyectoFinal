@@ -40,8 +40,7 @@
         </button>
         <ul class="dropdown-menu">
           <li><a class="drop" href="/adminController/administracionProductos">Productos</a></li>
-          <li><a class="drop" href="#">Usuarios</a></li>
-          <li><a class="drop" href="#">Categorías</a></li>
+          <li><a class="drop" href="/adminController/administracionEtiquetas">Etiquetas</a></li>
           
         </ul>
 
@@ -52,13 +51,8 @@
 
         <ul class="dropdown-menu">
           <li><a class="drop" href="/usuario/perfil">Perfil</a></li>
-          <li><a class="drop" href="#">Cesta</a></li>
-          <li><a class="drop" href="#">Carrito</a></li>
-
-          {% if admin.rol %}
-          <li><a class="drop" href="#">Admin</a></li>
-          {%endif%}
-          <li><a class="drop" href="#">Salir</a></li>
+          <li><a class="drop" href="/mostrarCarrito/">Carrito</a></li>
+          <li><a class="drop" href="/logOut/">Salir</a></li>
         </ul>
       </nav>
     </div>
@@ -102,7 +96,7 @@
 
       
     </div>
-    <input type="hidden" name="agregar" id="agregar"/> <a class="btn btn-success" href="#">Añadir Usuario</a>
+    <input type="hidden" name="agregar" id="agregar"/> <a class="btn btn-success" href="/adminController/registrarUsuario/">Añadir Usuario</a>
   </body>
 </html>
 {% include "footer.html" %}
