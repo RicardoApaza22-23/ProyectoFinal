@@ -28,21 +28,7 @@ header {
     align-items: center;
     z-index: 99;
     background: linear-gradient(to left, #347056 ,#082016);
-    /* background-color: blue; */
-    /*
-    padding: 130px;
-    font-size: 1.1em 2px; 
-    text-decoration: none;
 
-    text-align: center;
-    font-weight: 600;
-    padding-bottom: 0;
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 20px; 
-    justify-content: space-between ;
-    color: black;
-    background-color: red; */
 
 }
 
@@ -159,20 +145,14 @@ body {
 
 .navegacionHome .favoritos{
     cursor: pointer;
-    /* text-align: left; */
-    /* background-color: blue; */
-    /* background-color: blue; */
+
     right: 90px;
-    /*margin-left: 100px;*/
-    /* padding: 10px 20px 10px; */
+
 }
 
 .navegacionHome .cart{
     cursor: pointer;
-    /*background-color: purple;*/
-    /* right: 230px;
-    top:165.5px; */
-    /* background-color: blue; */
+
 }
 .navegacionHome .icono-favoritos{
     
@@ -247,25 +227,6 @@ body {
     
 }
 
-/* .fa-heart{
-    position: relative;
-    margin-left: 140%;
-    
-    color: rgb(255, 255, 255);
-
-} */
-
-
-
-/* .icono-car {
-    
-    text-decoration: none;
-    cursor: pointer;
-    font-weight: bold;
-    box-sizing: border-box;
-    width: 60px;
-    margin-left: 94%;
-} */
 
 
 
@@ -375,8 +336,8 @@ body {
 }
 .container {
     max-width: 1068px;
-    margin: auto;
-    width: 100%;
+    /* margin: auto; */
+    /* width: 100%; */
 
 }
 
@@ -394,9 +355,8 @@ section {
 
 .productos-contenido {
 background-color: transparent;
-     display: grid;
+     display: flex;
 
-     z-index: 99;    
 
     
     grid-template-columns: repeat(auto-fit, minmax(220px, auto));
@@ -407,10 +367,12 @@ background-color: transparent;
 
 .producto-box {
     position: relative;
-    overflow: auto;
+
     background-color: #347056;
    
 }
+
+
 
 .producto-box:hover {
     padding: 10px;
