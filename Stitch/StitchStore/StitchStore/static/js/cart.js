@@ -36,7 +36,7 @@ function botonesCarrito(){
     var cantidades = document.getElementsByClassName("cantidadProducto-cart")
     for(var a = 0; a<cantidades.length;a++){
         var cantidad = cantidades[a]
-        cantidad.addEventListener("change",setCantidadDefault)
+        cantidad.addEventListener("change", )
     }
     var addCart = document.getElementsByClassName("add-cart")
     for(e=0;e<addCart.length;e++){
