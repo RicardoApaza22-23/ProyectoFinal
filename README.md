@@ -1,6 +1,5 @@
 # STITCH'S STORE
 Repositorio que aloja el desarrollo de mi proyecto de fin de ciclo
-# Nombre del Proyecto
 Stitch's store es un proyecto sobre una tienda online.
 
 ## Tabla de Contenidos
