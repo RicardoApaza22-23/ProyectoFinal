@@ -48,6 +48,13 @@ urlpatterns = [
     path('home/estaciones/<estacion_nombre>',views.mostrarProductosEstacion),
     path('home/etiquetas/<etiqueta_nombre>',views.mostrarProductosEtiquetas),
     path('adminController/administracionProductos',views.administracionProductos),
+    path('adminController/administracionEtiquetas',views.administracionEtiquetas),
+    path('adminController/eliminarEtiqueta/<int:id_etiqueta>',views.adminEliminarEtiqueta),
+    path('adminController/registrarUsuario/', views.adminRegistrarUsuario),
+    path('adminController/registrarUsuario/registerPOST/',views.registerPOST),
+    path('adminController/registrarProducto/',views.adminRegistrarProducto),
+    path('adminController/registrarProducto/crearProductoPOST/',views.adminRegisterProductoPOST)
+    
     
     #path('home/prendas/<prenda_nombre>')
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
