@@ -67,11 +67,12 @@ const csrftoken = getCookie('csrftoken');
                  
                     
             <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
+                <img class="fotoProducto" src="{{prod.foto.url}}" alt="fotoProducto" />
                     <h2 class="titulo-producto">{{prod.nombre}}</h2>
                     <span class="precio-producto">{{prod.precio}}€</span>
                     <input type="hidden" value="{{prod.id}}" id="id-producto" class="id-producto">
                     <!-- <input type="hidden"  name="eliminar"/><a class="btn btn-danger" href="addProduct/{{prod.id}}">Añadir al Carrito</a> -->
+                    <a href="/addFavoritos/{{prod.id}}"><i class="fa-solid fa-heart favoritos" ></i></a>
                     <a href="/addProduct/{{prod.id}}"><i class="fa-solid fa-cart-shopping add-cart" ></i></a>
                     <input type="hidden" name="next" value="{{ request.path }}">
                     
