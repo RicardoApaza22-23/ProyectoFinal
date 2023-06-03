@@ -38,26 +38,18 @@ const csrftoken = getCookie('csrftoken');
 
 <body>
 
-    <section class="nav-prendas">
-        <div class="prendas">
 
-            <ul>
-                <div class="prenda-box">
-                    {% for prenda in prendas%}
-                    <li><a href="/home/prendas/{{prenda.nombre}}" class="prenda-link nav-active">{{prenda.nombre}}</a></li>
-                    {%endfor%}
-                </div>
-            </ul>
-
-        </div>
-    </section>
     <!-- {% for prod in productos %}
     <h1>{{ prod.nombre }} </h1>
     {% endfor %} -->
 
+    {%if productos|length > 0 %}
+    
+    {%else%}
+    <a class="btn btn-success" href="/home/">Compra Algo</a>
+    {%endif%}
 
-
-<!--CONTENIDO DE LA TIENDA-->
+<!--CONTENIDO DE FAVORITOS-->
     <section class="section-productos">
         <!--PRODUCTO BOX-->
         <div class="productos-contenido">
@@ -67,7 +59,7 @@ const csrftoken = getCookie('csrftoken');
                  
                     
             <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
+                <img class="fotoProducto" src="{{prod.foto.url}}" alt="fotoProducto" />
                     <h2 class="titulo-producto">{{prod.nombre}}</h2>
                     <span class="precio-producto">{{prod.precio}}€</span>
                     <input type="hidden" value="{{prod.id}}" id="id-producto" class="id-producto">
