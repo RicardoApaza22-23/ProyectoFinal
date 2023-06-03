@@ -100,10 +100,13 @@ const csrftoken = getCookie('csrftoken');
             
             {% for prod in cesta %}
             <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto"/>
+                <img class="fotoProducto" src="{{prod.id_producto.foto.url}}" alt="fotoProducto"/>
                     <h2 class="titulo-producto">{{prod.nombre_producto}}</h2>
-                    <span class="precio-producto">{{prod.precio_producto}}€</span>                   
+                    <span class="precio-producto">{{prod.precio_producto}}</span>€               
                     <a class="btn btn-danger" href="/eliminarProducto/{{prod.id_producto.id}}">Eliminar Producto</a>
+                    <input type="number" onkeypress="sum()">
+                    <p class="descripcion-producto">{{prod.id_producto.descripcion}}</p>
+                    
                     <hr style="border : 3px solid">
                 </div> 
                
@@ -111,18 +114,22 @@ const csrftoken = getCookie('csrftoken');
             
         </form>
         
-            
+    
 
         </div>
-
+        <p id="total" ></p>
     </section>
     {%if cesta|length > 0 %}
     <a class="btn btn-success" href="/comprar/">Realizar Compra</a>
     {%else%}
     <a class="btn btn-success" href="/home/">Compra Algo</a>
     {%endif%}
-    <script src="{% static 'js/cart.js' %}">
-
+    <script>
+        function sum(){
+            var precio = document.getElementsByClassName('.precio-producto').value;
+            var sum = 2+2;
+            document.getElementById('total').innerHTML=sum
+        }
     </script>
 
 </body>
