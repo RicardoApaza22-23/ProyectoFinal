@@ -32,36 +32,61 @@
     }
     return cookieValue;
 }
+
 const csrftoken = getCookie('csrftoken');
         </script>
+        <style>
+   
+            .contenedor{
+                display: grid;
+            grid-template-columns: 1fr 1fr;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            margin-bottom: -100px;
+            text-align: center;
+            background-color: #347056;
+   
+            }
+            .bloque{
+                border : 1px ;
+                padding: 10px;
+              
+            }
+            
+.bloque p{
+    font-weight: bold;
+    
+}
+        </style>
 </head>
 
 <body>
 
 
-    <!-- {% for prod in productos %}
-    <h1>{{ prod.nombre }} </h1>
-    {% endfor %} -->
-
-    {%if productos|length > 0 %}
-    
-    {%else%}
-    <a class="btn btn-success" href="/home/">Compra Algo</a>
-    {%endif%}
-
 <!--CONTENIDO DE PERFIL-->
-    <section class="section-perfil">
-        
-        <div class="perfil-contenido">
-        {{usuario.nombre}}
-        {{usuario.email}}
-        {{perfil.telefono}}
-        {{perfil.direccion}}
-        {{fecha_nacimiento}}
-        {{perfil.pais}}
-        {{perfil.dni}}
-        </div>
-
+<div class="contenedor">
+    <div class="bloque">
+        <h3>NOMBRE</h3>
+        <p>{{usuario.nombre}}</p>
+        <h3>EMAIL</h3>
+        <p>{{usuario.email}}</p>
+        <h3>TELEFONO</h3>
+        <p>{{perfil.telefono}}</p>
+        <h3>ROL</h3>
+        <p>{{usuario.rol}}</p>
+    </div>
+    <div class="bloque">
+        <h3>DIRECCIÓN</h3>
+        <p>{{perfil.direccion}}</p>
+        <h3>FECHA DE NACIMIENTO</h3>
+        <p>{{fecha_nacimiento}}</p>
+        <h3>PAÍS</h3>
+        <p>{{perfil.pais}}</p>
+        <h3>DNI</h3>
+        <p>{{perfil.dni}}</p>
+    </div>
+</div>
     </section>
     <script src="{% static 'js/cart.js' %}">
 

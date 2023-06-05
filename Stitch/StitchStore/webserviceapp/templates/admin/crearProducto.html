@@ -26,14 +26,14 @@
 
       <div class="input-register">
         <label for="nombre_producto">Nombre de Producto:</label><br />
-        <i class="fa-solid fa-user"></i>
+        <i class="fa-solid fa-cart-plus"></i>
         <input type="text" id="nombre_producto" name="nombre_producto" required /><br />
 
       </div>
 
       <div class="input-register">
         <label for="estado_producto">Estado de Producto:</label><br />
-        <i class="fa-solid fa-user"></i>
+        <i class="fa-regular fa-star"></i>
         <select class="form-select" required aria-label="Default select example" name="estado_producto" id="estado_producto">
             <option value="" selected>Elige un estado</option>
             <option value="nuevo">Nuevo</option>
@@ -43,7 +43,7 @@
 
       <div class="input-register">
         <label for="etiqueta_producto">Etiqueta:</label><br />
-        <i class="fa-solid fa-user"></i>
+        <i class="fa-solid fa-ticket-simple"></i>
         <select class="form-select" required aria-label="Default select example" name="etiqueta_producto" id="etiqueta_producto">
             <option value="" selected>Etiquetas</option>
             {% for eti in etiquetas%}
@@ -54,7 +54,7 @@
 
       <div class="input-register">
         <label for="persona_producto">Persona:</label><br />
-        <i class="fa-solid fa-user"></i>
+        <i class="fa-solid fa-person"></i>
         <select class="form-select" required aria-label="Default select example" name="persona_producto" id="persona_producto">
             <option value="" selected>Persona</option>
             {% for pers in persona %}
@@ -79,19 +79,19 @@
 
       <div class="input-register">
         <label for="precio_producto">Precio de Producto:</label><br />
-        <i class="fa-solid fa-user"></i>
+        <i class="fa-solid fa-credit-card"></i>
        <input type="number" min="0.00"  step="0.01" required class="form-select" style="background-color: white;" placeholder="precio €" aria-label="Default select example" id="precio_producto" name="precio_producto" />
       </div>
 
       <div class="input-register">
         <label for="foto_producto">Foto de Producto:</label><br />
-        <i class="fa-solid fa-user"></i>
+        <i class="fa-solid fa-image"></i>
        <input type="file" required  class="form-select"  id="foto_producto" name="foto_producto" />
       </div>
 
       <div class="input-register">
         <label for="talla_producto">Talla de Producto:</label><br />
-        <i class="fa-solid fa-user"></i>
+        <i class="fa-solid fa-text-size"></i>
         <select class="form-select" required aria-label="Default select example" name="talla_producto" id="talla_producto">
             <option value="" selected>Elige una talla</option>
 
@@ -119,7 +119,7 @@
 
       <div class="input-register">
         <label for="descripcion_producto">Descripcion de Producto:</label><br />
-        <i class="fa-solid fa-user"></i>
+        <i class="fa-solid fa-circle-info"></i>
        <!-- <input type="text" class="form-select" style="background-color: white;" id="foto_producto" name="foto_producto"/> -->
        <textarea required name="descripcion_producto" id="descripcion_producto" cols="47.5" rows="2">{{producto.descripcion}}</textarea>
       </div>

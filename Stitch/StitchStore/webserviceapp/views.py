@@ -427,9 +427,11 @@ def perfilForm(request):
     if usuario_id:
         
         perfil = Perfil.objects.get(id_usuario = usuario_id)
+        fecha_string = str(perfil.fecha_nacimiento)
         context = {
             'usuario' : usuario,
-            'perfil' : perfil
+            'perfil' : perfil,
+            'fecha_nacimiento' : fecha_string
         }
         return render(request, "mostrarPerfil.html",context)
     else:
