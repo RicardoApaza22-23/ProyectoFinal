@@ -46,7 +46,7 @@ const csrftoken = getCookie('csrftoken');
             <ul>
                 <div class="prenda-box">
                     {% for prenda in prendas%}
-                    <li><a href="/home/prendas/{{prenda.nombre}}" class="prenda-link nav-active">{{prenda.nombre}}</a></li>
+                    <li><a href="/home/etiquetas/{{prenda.nombre}}" class="prenda-link nav-active">{{prenda.nombre}}</a></li>
                     {%endfor%}
                 </div>
             </ul>
@@ -69,7 +69,7 @@ const csrftoken = getCookie('csrftoken');
                  
                     
             <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
+                <img class="fotoProducto" src="{{prod.foto.url}}" alt="fotoProducto" />
                     <h2 class="titulo-producto">{{prod.nombre}}</h2>
                     <span class="precio-producto">{{prod.precio}}€</span>
                     <input type="hidden" value="{{prod.id}}" id="id-producto" class="id-producto">
