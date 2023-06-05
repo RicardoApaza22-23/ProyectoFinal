@@ -15,6 +15,7 @@ from django.contrib import messages
 from random import randrange
 from django.core import serializers
 from django.core.files.storage import FileSystemStorage
+from decimal import Decimal
 # -------------------------------------------------------USUARIOS---------------------------------------------------#
 
 # --------------------------------LOGIN Y LOGOUT
@@ -254,6 +255,7 @@ def mostrarProductosEstacion(request,estacion_nombre):
                 diccionario['nombre'] = prod.nombre
                 diccionario['precio'] = prod.precio
                 diccionario['descripcion'] = prod.descripcion
+                diccionario['foto'] = prod.foto
                 productosList.append(diccionario)
 
                 
@@ -317,7 +319,8 @@ def mostrarProductosEtiquetas(request, etiqueta_nombre):
                 context['admin'] = admin
                 
         return render(request,"home_etiquetas.html",context)
-    return redirect("/home/")
+    else:
+        return redirect("/home/")
     
 
 # ----------------------------------REGISTER
@@ -422,7 +425,13 @@ def perfilForm(request):
     usuario = Usuarios.objects.get(nombre=usuario_logeado)
     usuario_id = Perfil.objects.filter(id_usuario=usuario.id).exists()
     if usuario_id:
-        return render(request, "mostrarPerfil.html")
+        
+        perfil = Perfil.objects.get(id_usuario = usuario_id)
+        context = {
+            'usuario' : usuario,
+            'perfil' : perfil
+        }
+        return render(request, "mostrarPerfil.html",context)
     else:
         return render(request, "perfilForm.html")
     
@@ -483,11 +492,10 @@ def administradorOperaciones(request):
     #encontramos al usuario
     usuarios = Usuarios.objects.all()
     usuario_id_cookie = request.COOKIES.get("id_usuario")
-    productos = Producto.objects.all()
     #falta: subir ejemplos de productos
     context = {
         'usuarios' : usuarios,
-        'productos' : productos
+        
     }
     #verificamos si el usuario es admin 
     if(usuario_id_cookie != 0):
@@ -731,11 +739,13 @@ def adminRegistrarProducto(request):
         usuarios = Usuarios.objects.all()
         etiquetas = Etiqueta.objects.all().exclude(nombre = 'Hombre').exclude(nombre='Mujer').exclude(nombre='Niños')
         persona = Etiqueta.objects.all().exclude(nombre = 'Chaqueta').exclude(nombre = 'Pantalones').exclude(nombre = 'Camiseta').exclude(nombre='Sneakers')
+
         if es_admin(request,usuario_id):
             context = {
                 'usuarios' : usuarios,
                 'etiquetas' : etiquetas,
-                'persona' : persona
+                'persona' : persona,
+         
             }
     return render(request,"admin/crearProducto.html",context)
 
@@ -763,6 +773,11 @@ def adminRegisterProductoPOST(request):
         etiqueta_producto = ProductoEtiqueta()
         etiqueta_producto.id_etiqueta = etiquetas
         etiqueta_producto.id_producto = new_producto
+        persona = Etiqueta.objects.get(pk = requestForm['persona_producto'])
+        persona_producto = ProductoEtiqueta()
+        persona_producto.id_etiqueta = persona
+        persona_producto.id_producto = new_producto
+        persona_producto.save()
         etiqueta_producto.save()
         
         return administracionProductos(request)
@@ -786,8 +801,47 @@ def adminEliminarEtiqueta(request,id_etiqueta):
 def adminRegistrarUsuario(request):
     return render(request,"admin/crearUsuario.html")
 
+  # metodo para registrar un usuario
+def adminRegistrarUsuarioPOST(request):
+  
 
-
+    # solo aceptamos POST
+    if (request.method != 'POST'):
+        return None
+    # guardamos los request
+    form_register = request.POST.dict()
+    # y asignamos valores para mayor seguridad
+    nickname = form_register.get('nickname')
+    password = form_register.get('password')
+    password_repeat = form_register.get('password_repeat')
+    rol = form_register.get('rol')
+    email = form_register.get('email')
+    # verificamos si los datos no están vacíos
+    if campo_vacio_de_usuarios(nickname, email, password, rol) == False:
+        # validamos el campo nickname
+        pass
+        if compara_datos(password, password_repeat) == True:
+            newUser = Usuarios()
+            newUser.nombre = nickname
+            newUser.email = email
+            # hasheamos la password
+            pass_hash = make_password(password)
+            newUser.password = pass_hash
+            newUser.rol = rol
+            # generamos un token
+            secret = 'secreto_word'
+            payload = {
+            'user_id': newUser.id,
+            'username': newUser.nombre
+            }
+            token = jwt.encode(
+            payload, secret, algorithm='HS256')
+            newUser.token = token
+            newUser.save()
+            return administradorOperaciones(request)
+        
+    else: 
+        return render(request,"errors/errorProducto")
 
 #---------------------------------------------------FINADMIN
 
@@ -835,6 +889,8 @@ def addProductoCart(request,id_producto):
                 compra.order_id = id_carrito
                 compra.cantidad = 1
                 compra.realizado = False
+                
+                
             compra.save()
             
             context = {
@@ -878,11 +934,36 @@ def mostrarCarrito(request):
 #si el usuario tiene el perfil completado, se realizará la compra
 #de lo contrario, deberá completarlo antes de comprar
 def comprar(request):
+    
+    #return JsonResponse({"status" : context})
     usuario_id = request.COOKIES.get('id_usuario')
     compra = Carrito.objects.filter(id_comprador = usuario_id, realizado = False)
     perfil = Perfil.objects.filter(id_usuario = usuario_id).exists()
     if perfil == True:
+        productos = request.POST.getlist('titulo_producto')
+        cantidades = (request.POST.getlist('cantidad'))
+        cantidadesList = []
+        idsList = []
+        ids = request.POST.getlist('id_producto')
+        total = (request.POST['precio_total'])
+        #cambiamos la cantidad de los producto que por defecto estaba en 1
+        for id in ids:
+            idsList.append(id)
+        
+        for cant in (cantidades): 
+            cantidadesList.append(cant)
+            
+
+        for carr,num in zip(compra,cantidadesList):
+            carr.cantidad = num
+            carr.precio_total_carrito = total
+            carr.save()
+            
+            
+        
         compra.update(realizado = True)
+        
+        request.session['cesta'] = []
         return render(request,"succesfully/comprado.html")
     else:
         return redirect("/usuario/perfil/")
