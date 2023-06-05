@@ -22,7 +22,7 @@
             {% for prod in producto %}
                   
             <div class="producto-box">
-                <img class="fotoProducto" src="{% static '/img/logo2.png' %}" alt="fotoProducto" />
+                <img  src="{{prod.foto.url}}" alt="fotoProducto" height="40%" width="40%"//>
                     <h2 class="titulo-producto">{{prod.nombre}}</h2>
                     <span class="precio-producto">{{prod.precio}}€</span>
                     <!-- <input type="hidden"  name="eliminar"/><a class="btn btn-danger" href="addProduct/{{prod.id}}">Añadir al Carrito</a> -->
