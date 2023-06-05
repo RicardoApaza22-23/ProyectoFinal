@@ -51,7 +51,7 @@ urlpatterns = [
     path('adminController/administracionEtiquetas',views.administracionEtiquetas),
     path('adminController/eliminarEtiqueta/<int:id_etiqueta>',views.adminEliminarEtiqueta),
     path('adminController/registrarUsuario/', views.adminRegistrarUsuario),
-    path('adminController/registrarUsuario/registerPOST/',views.registerPOST),
+    path('adminController/registrarUsuario/registerPOST/',views.adminRegistrarUsuarioPOST),
     path('adminController/registrarProducto/',views.adminRegistrarProducto),
     path('adminController/registrarProducto/crearProductoPOST/',views.adminRegisterProductoPOST)
     
