@@ -73,8 +73,7 @@ const csrftoken = getCookie('csrftoken');
             </button>
             <ul class="dropdown-menu ">
                 <li><a class="drop" href="/usuario/perfil">Perfil</a></li>
-                <li><a class="drop" href="#">Cesta</a></li>
-                <li><a class="drop" href="#">Carrito</a></li>
+
                 
                 {% if admin.rol %}
                 <li><a class="drop" href="/adminController/">Admin</a></li>
@@ -95,23 +94,33 @@ const csrftoken = getCookie('csrftoken');
     <section class="section-productos">
         <!--PRODUCTO BOX-->
         <div class="productos-contenido">
-            <form  method="POST">
+            <form action="/comprar/" method="POST">
                 {% csrf_token %}
-            
+                
             {% for prod in cesta %}
             <div class="producto-box">
                 <img class="fotoProducto" src="{{prod.id_producto.foto.url}}" alt="fotoProducto"/>
-                    <h2 class="titulo-producto">{{prod.nombre_producto}}</h2>
-                    <span class="precio-producto">{{prod.precio_producto}}</span>€               
+                <input type="hidden" name="id_producto" value="{{prod.id_producto.id}}">
+                    <h2 class="titulo-producto" id="titulo-producto">{{prod.nombre_producto}}</h2>
+                    <input type="hidden" name="titulo_producto" value="{{prod.nombre_producto}}" >
+                    <span class="precio-producto" >{{prod.precio_producto}}</span>€               
                     <a class="btn btn-danger" href="/eliminarProducto/{{prod.id_producto.id}}">Eliminar Producto</a>
-                    <input type="number" onkeypress="sum()">
+                    <input type="number" value="1" name="cantidad">
                     <p class="descripcion-producto">{{prod.id_producto.descripcion}}</p>
-                    
+
                     <hr style="border : 3px solid">
                 </div> 
-               
+         
+
             {%endfor%}
             
+            <p>Precio Total: <span id="precio-total">0.00€</span></p>
+            {%if cesta|length > 0 %}
+            <a  href="/comprar/"><button type="sumbit" class="btn btn-success">Realizar Compra</button></a>
+            {%else%}
+            <a class="btn btn-success" href="/home/">Compra Algo</a>
+            {%endif%}
+            <input type="hidden" name="precio_total" id="precio-total-input">
         </form>
         
     
@@ -119,17 +128,11 @@ const csrftoken = getCookie('csrftoken');
         </div>
         <p id="total" ></p>
     </section>
-    {%if cesta|length > 0 %}
-    <a class="btn btn-success" href="/comprar/">Realizar Compra</a>
-    {%else%}
-    <a class="btn btn-success" href="/home/">Compra Algo</a>
-    {%endif%}
-    <script>
-        function sum(){
-            var precio = document.getElementsByClassName('.precio-producto').value;
-            var sum = 2+2;
-            document.getElementById('total').innerHTML=sum
-        }
+
+
+    <script src="{% static 'js/compra.js' %}" >
+
+
     </script>
 
 </body>
