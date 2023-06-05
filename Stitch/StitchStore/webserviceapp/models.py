@@ -86,6 +86,8 @@ class Carrito(models.Model):
     order_id = models.CharField(max_length=200)
     realizado = models.IntegerField()
     precio_producto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    precio_total_carrito = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
 
     class Meta:
         managed = False
@@ -163,8 +165,8 @@ class Etiqueta(models.Model):
 
 
 class Favoritos(models.Model):
-    id_producto = models.ForeignKey('Producto', models.DO_NOTHING, db_column='id_producto')
-    id_usuario = models.ForeignKey('Usuarios', models.DO_NOTHING, db_column='id_usuario')
+    id_producto = models.ForeignKey('Producto', on_delete=models.CASCADE, db_column='id_producto')
+    id_usuario = models.ForeignKey('Usuarios', on_delete=models.CASCADE, db_column='id_usuario')
     fecha = models.DateField(blank=True, null=True)
 
     class Meta:
@@ -188,7 +190,7 @@ class Perfil(models.Model):
 class Producto(models.Model):
     nombre = models.CharField(max_length=250)
     estado = models.CharField(max_length=50)
-    propietario = models.ForeignKey('Usuarios', models.DO_NOTHING, db_column='propietario')
+    propietario = models.ForeignKey('Usuarios', on_delete=models.CASCADE, db_column='propietario')
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     foto = models.ImageField(upload_to='productos')
     talla = models.CharField(max_length=20)
